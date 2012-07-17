@@ -2,6 +2,7 @@ package net.cghsystems.notes.ui
 
 
 import groovy.swing.SwingBuilder
+import groovy.util.logging.Log4j
 
 import java.awt.BorderLayout as BL
 import java.awt.Color
@@ -14,10 +15,8 @@ import javax.swing.BoxLayout
 import javax.swing.JFrame
 import javax.swing.JOptionPane as OP
 
-
-//Support links
-//Add links from one note to another. link:notename
-public class DefinitionsGUI {
+@Log4j
+class DefinitionsGUI {
 
 	static main(args) {
 		final n = new DefinitionsGUI()
@@ -147,7 +146,7 @@ public class DefinitionsGUI {
 		} ] as KeyAdapter
 
 		final addButtonGroup = {
-			def stores = ds.getDefinitionStoreSourceKeys()
+			def stores = ["test1", "test2"] 
 
 			swingBuilder.panel(background: Color.WHITE, layout: new FlowLayout()) {
 				myGroup = buttonGroup()
@@ -155,7 +154,10 @@ public class DefinitionsGUI {
 					def r = radioButton(text:it, buttonGroup:myGroup, background: Color.WHITE,
 					actionPerformed: {
 						ds.updateCurrentStoreSource(it.source.text)
-						searchForNoteAndDisplayResults("")
+						
+                        log.info("NEED TO IMPLEMENT ds.updateCurrentStoreSource(it.source.text)")
+                        
+                        searchForNoteAndDisplayResults("")
 					})
 				}
 			}
@@ -175,16 +177,15 @@ public class DefinitionsGUI {
 
 	private void searchForNoteAndDisplayResults(d) {
 		swingBuilder.doOutside {
-			final data = ds.getDefinitionsForQuery(d)
-			data.sort { it.name.toLowerCase() }
-			swingBuilder.edt { resultsList.listData = data }
+			log.warn("NEED TO IMPLEMENT ds.getDefinitionsForQuery(d)")
+            //final data = ds.getDefinitionsForQuery(d)
+			//data.sort { it.name.toLowerCase() }
+			//swingBuilder.edt { resultsList.listData = data }
 		}
 	}
 
 	private void addSystemWideKeyBoardShortcuts(sm, shutdownListener) {
-		def scl = new SystemWideKeyBoardShortcutInstaller(definitionsGUIDisplayStateMachine: sm)
-		scl.install()
-		shutdownListener << scl
+	
 	}
 
 	private void addApplicationTrayIcon(title, frame, sm, shutdownListener) {
