@@ -13,7 +13,7 @@
 	<int-http:outbound-gateway
 		url="http://localhost:8080/cgh-definitions-services/definition/find/id/{id}"
 		request-channel="findDefinitionsRequestChannel" reply-channel="findDefinitionsReplyChannel"
-		http-method="GET" expected-response-type="net.cghsystems.notes.ui.Definition">
+		http-method="GET" expected-response-type="net.cghsystems.definitions.ui.Definition">
 		<int-http:uri-variable name="id" expression="payload" />
 	</int-http:outbound-gateway>
 
@@ -23,7 +23,7 @@
 	<int-http:outbound-channel-adapter
 		url="http://localhost:8080/cgh-definitions-services/definition/create/id/{id}/name/{name}/definition/{definition}/description/{description}/cat/{cat}"
 		channel="createDefinitionsRequestChannel" http-method="GET"
-		expected-response-type="net.cghsystems.notes.ui.Definition">
+		expected-response-type="net.cghsystems.definitions.ui.Definition">
 		<int-http:uri-variable name="id" expression="payload.id" />
 		<int-http:uri-variable name="name" expression="payload.name" />
 		<int-http:uri-variable name="definition"
@@ -40,7 +40,7 @@
 	<int-http:outbound-channel-adapter
 		url="http://localhost:8080/cgh-definitions-services/definition/delete/id/{id}"
 		channel="deleteDefinitionsRequestChannel" http-method="DELETE"
-		expected-response-type="net.cghsystems.notes.ui.Definition">
+		expected-response-type="net.cghsystems.definitions.ui.Definition">
 		<int-http:uri-variable name="id" expression="payload" />
 	</int-http:outbound-channel-adapter>
 

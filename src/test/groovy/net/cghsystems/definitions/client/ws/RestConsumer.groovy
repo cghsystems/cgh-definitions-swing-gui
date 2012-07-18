@@ -4,7 +4,7 @@ import static org.junit.Assert.*
 
 import javax.annotation.Resource
 
-import net.cghsystems.notes.ui.Definition
+import net.cghsystems.definitions.ui.Definition
 
 import org.junit.AfterClass
 import org.junit.BeforeClass

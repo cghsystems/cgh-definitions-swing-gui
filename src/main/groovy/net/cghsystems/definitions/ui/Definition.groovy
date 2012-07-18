@@ -1,4 +1,4 @@
-package net.cghsystems.notes.ui
+package net.cghsystems.definitions.ui
 
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString

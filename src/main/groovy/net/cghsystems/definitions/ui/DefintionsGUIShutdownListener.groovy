@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.cghsystems.notes.ui
+package net.cghsystems.definitions.ui
 
 import groovy.lang.PackageScope
 
