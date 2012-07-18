@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int-http="http://www.springframework.org/schema/integration/http"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-2.1.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<int:channel id="findDefinitionsRequestChannel" />
+	<int:channel id="findDefinitionsReplyChannel" />
+
+	<int-http:outbound-gateway
+		url="http://localhost:8080/cgh-definitions-services/definition/find/id/{id}"
+		request-channel="findDefinitionsRequestChannel" reply-channel="findDefinitionsReplyChannel"
+		http-method="GET" expected-response-type="net.cghsystems.notes.ui.Definition">
+		<int-http:uri-variable name="id" expression="payload" />
+	</int-http:outbound-gateway>
+
+	<bean id="jsonConverter"
+		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+
+</beans>
