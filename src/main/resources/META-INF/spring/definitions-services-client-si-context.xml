@@ -6,6 +6,7 @@
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<!-- Find Definitions -->
 	<int:channel id="findDefinitionsRequestChannel" />
 	<int:channel id="findDefinitionsReplyChannel" />
 
@@ -16,7 +17,34 @@
 		<int-http:uri-variable name="id" expression="payload" />
 	</int-http:outbound-gateway>
 
+	<!--Create Definition -->
+	<int:channel id="createDefinitionsRequestChannel" />
+
+	<int-http:outbound-channel-adapter
+		url="http://localhost:8080/cgh-definitions-services/definition/create/id/{id}/name/{name}/definition/{definition}/description/{description}/cat/{cat}"
+		channel="createDefinitionsRequestChannel" http-method="GET"
+		expected-response-type="net.cghsystems.notes.ui.Definition">
+		<int-http:uri-variable name="id" expression="payload.id" />
+		<int-http:uri-variable name="name" expression="payload.name" />
+		<int-http:uri-variable name="definition"
+			expression="payload.definition" />
+		<int-http:uri-variable name="description"
+			expression="payload.description" />
+		<int-http:uri-variable name="cat"
+			expression="payload.definitionCategoryId" />
+	</int-http:outbound-channel-adapter>
+
+	<!-- Delete -->
+	<int:channel id="deleteDefinitionsRequestChannel" />
+
+	<int-http:outbound-channel-adapter
+		url="http://localhost:8080/cgh-definitions-services/definition/delete/id/{id}"
+		channel="deleteDefinitionsRequestChannel" http-method="DELETE"
+		expected-response-type="net.cghsystems.notes.ui.Definition">
+		<int-http:uri-variable name="id" expression="payload" />
+	</int-http:outbound-channel-adapter>
+
+
 	<bean id="jsonConverter"
 		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
-
 </beans>
