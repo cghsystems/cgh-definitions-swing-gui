@@ -23,3 +23,4 @@ Plan.xml
 build
 .gradle
 .scala_dependencies
+out

@@ -1,20 +1,22 @@
-package net.cghsystems.definitions.ui;
-
-import groovy.lang.PackageScope
+package net.cghsystems.definitions.ui
 
 import java.awt.Color
 import java.awt.Component
 
+import javax.annotation.Resource
 import javax.swing.BorderFactory as BF
 import javax.swing.BoxLayout
 import javax.swing.DefaultListCellRenderer
 import javax.swing.JList
 
-@PackageScope
 class StripeRenderer extends DefaultListCellRenderer {
 
     def listComponents = [:]
-    def builder, currentlySelected
+
+    @Resource(name = "swingBuilder")
+    final builder
+
+    def currentlySelected
 
     @Override
     Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {

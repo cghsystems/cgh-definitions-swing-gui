@@ -1,7 +1,6 @@
 package net.cghsystems.definitions.ui
 
 
-import groovy.lang.PackageScope
 import groovy.swing.SwingBuilder
 
 import java.awt.Frame
@@ -12,7 +11,7 @@ import java.awt.TrayIcon
 import java.awt.event.ActionListener
 import java.awt.event.WindowAdapter
 
-@PackageScope
+@groovy.transform.PackageScope
 class DefinitionsTrayIcon implements GUIShutdownEvent {
 
     private definitionsGUIDisplayStateMachine
@@ -21,8 +20,8 @@ class DefinitionsTrayIcon implements GUIShutdownEvent {
     private trayIcon
     private frame
 
-    private static final IS_MAXIMISED = 1;
-    private static final IS_MINIMISED = 0;
+    private static final IS_MAXIMISED = 1
+    private static final IS_MINIMISED = 0
 
 
     private final actionListener =  {action ->
@@ -67,20 +66,20 @@ class DefinitionsTrayIcon implements GUIShutdownEvent {
     }
 
     private def getPopupMenu() {
-        PopupMenu popup = new PopupMenu();
+        PopupMenu popup = new PopupMenu()
         addShowMenuItemToPopup(popup)
         addExitMenuItemToPopup(popup)
         popup
     }
 
     private void addShowMenuItemToPopup(popup) {
-        def exit = new MenuItem("Show");
+        def exit = new MenuItem("Show")
         exit.addActionListener(actionListener({ showHide() }))
         popup.add(exit)
     }
 
     private void addExitMenuItemToPopup(popup) {
-        def exit = new MenuItem("Exit");
+        def exit = new MenuItem("Exit")
         exit.addActionListener(actionListener({ definitionsGUIShutDownListener.notifyOnClose() }))
         popup.add(exit)
     }

@@ -11,6 +11,7 @@ import java.awt.SystemTray
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 
+import javax.annotation.Resource
 import javax.swing.BoxLayout
 import javax.swing.JFrame
 import javax.swing.JOptionPane as OP
@@ -18,21 +19,22 @@ import javax.swing.JOptionPane as OP
 @Log4j
 class DefinitionsGUI {
 
-	static main(args) {
-		final n = new DefinitionsGUI()
-		n.show()
-	}
+    @Resource(name = "definitionsRestEndpoint")
+	private final definitionsRestEndpoint
+    
+    @Resource(name = "shutdownListener")
+	private final shutDownListener
 
-	private final ds
-	private final shutDownListener = new DefintionsGUIShutdownListener()
-
-	private final swingBuilder = new SwingBuilder()
-	private final stripeRender = new StripeRenderer(builder:swingBuilder)
+    @Resource(name = "swingBuilder")
+	private final swingBuilder
+    
+    @Resource(name = "stripeRenderer")
+	private final stripeRender
 
 	private resultsList
 
 	private currentSelectedLocation
-
+    
 	private final deleteNoteDialogAction = {
 
 		final toDelete = stripeRender.currentlySelected?.id ?: ""

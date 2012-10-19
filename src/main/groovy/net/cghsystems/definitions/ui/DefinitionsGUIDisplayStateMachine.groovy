@@ -2,7 +2,6 @@ package net.cghsystems.definitions.ui
 
 import java.awt.Frame
 
-@PackageScope
 class DefinitionsGUIDisplayStateMachine {
 
     private component
