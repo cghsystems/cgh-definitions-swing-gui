@@ -1,50 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int-http="http://www.springframework.org/schema/integration/http"
-	xmlns:int="http://www.springframework.org/schema/integration"
-	xsi:schemaLocation="http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-2.1.xsd
-		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.1.xsd
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int-http="http://www.springframework.org/schema/integration/http"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-2.2.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<!-- Find Definitions -->
-	<int:channel id="findDefinitionsRequestChannel" />
-	<int:channel id="findDefinitionsReplyChannel" />
+    <!-- Find Definitions -->
+    <int:channel id="findDefinitionsRequestChannel"/>
+    <int:channel id="findDefinitionsReplyChannel">
+        <int:queue/>
+    </int:channel>
 
-	<int-http:outbound-gateway
-		url="http://localhost:8080/cgh-definitions-services/definition/find/id/{id}"
-		request-channel="findDefinitionsRequestChannel" reply-channel="findDefinitionsReplyChannel"
-		http-method="GET" expected-response-type="net.cghsystems.definitions.ui.Definition">
-		<int-http:uri-variable name="id" expression="payload" />
-	</int-http:outbound-gateway>
+    <int-http:outbound-gateway
+            url="http://localhost:8080/cgh-definitions-services/definition/find/id/{id}"
+            request-channel="findDefinitionsRequestChannel" reply-channel="findDefinitionsReplyChannel"
+            http-method="GET" expected-response-type="net.cghsystems.definitions.domain.Definition">
+        <int-http:uri-variable name="id" expression="payload"/>
+    </int-http:outbound-gateway>
 
-	<!--Create Definition -->
-	<int:channel id="createDefinitionsRequestChannel" />
+    <!--Create Definition -->
+    <int:channel id="createDefinitionsRequestChannel"/>
 
-	<int-http:outbound-channel-adapter
-		url="http://localhost:8080/cgh-definitions-services/definition/create/id/{id}/name/{name}/definition/{definition}/description/{description}/cat/{cat}"
-		channel="createDefinitionsRequestChannel" http-method="GET"
-		expected-response-type="net.cghsystems.definitions.ui.Definition">
-		<int-http:uri-variable name="id" expression="payload.id" />
-		<int-http:uri-variable name="name" expression="payload.name" />
-		<int-http:uri-variable name="definition"
-			expression="payload.definition" />
-		<int-http:uri-variable name="description"
-			expression="payload.description" />
-		<int-http:uri-variable name="cat"
-			expression="payload.definitionCategoryId" />
-	</int-http:outbound-channel-adapter>
+    <int-http:outbound-channel-adapter
+            url="http://localhost:8080/cgh-definitions-services/definition/create/id/{id}/name/{name}/definition/{definition}/description/{description}/cat/{cat}"
+            channel="createDefinitionsRequestChannel" http-method="GET"
+            expected-response-type="net.cghsystems.definitions.domain.Definition">
+        <int-http:uri-variable name="id" expression="payload.id"/>
+        <int-http:uri-variable name="name" expression="payload.name"/>
+        <int-http:uri-variable name="definition"
+                               expression="payload.definition"/>
+        <int-http:uri-variable name="description"
+                               expression="payload.description"/>
+        <int-http:uri-variable name="cat"
+                               expression="payload.definitionCategoryId"/>
+    </int-http:outbound-channel-adapter>
 
-	<!-- Delete -->
-	<int:channel id="deleteDefinitionsRequestChannel" />
+    <!-- Delete -->
+    <int:channel id="deleteDefinitionsRequestChannel"/>
 
-	<int-http:outbound-channel-adapter
-		url="http://localhost:8080/cgh-definitions-services/definition/delete/id/{id}"
-		channel="deleteDefinitionsRequestChannel" http-method="DELETE"
-		expected-response-type="net.cghsystems.definitions.ui.Definition">
-		<int-http:uri-variable name="id" expression="payload" />
-	</int-http:outbound-channel-adapter>
+    <int-http:outbound-channel-adapter
+            url="http://localhost:8080/cgh-definitions-services/definition/delete/id/{id}"
+            channel="deleteDefinitionsRequestChannel" http-method="DELETE"
+            expected-response-type="net.cghsystems.definitions.domain.Definition">
+        <int-http:uri-variable name="id" expression="payload"/>
+    </int-http:outbound-channel-adapter>
 
 
-	<bean id="jsonConverter"
-		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+    <bean id="jsonConverter"
+          class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
 </beans>

@@ -1,7 +1,6 @@
 package net.cghsystems.definitions.ui
 
 
-import groovy.lang.PackageScope
 import groovy.swing.SwingBuilder
 
 import java.awt.Frame
@@ -12,7 +11,6 @@ import java.awt.TrayIcon
 import java.awt.event.ActionListener
 import java.awt.event.WindowAdapter
 
-@PackageScope
 class DefinitionsTrayIcon implements GUIShutdownEvent {
 
     private definitionsGUIDisplayStateMachine

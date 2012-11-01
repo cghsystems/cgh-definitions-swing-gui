@@ -12,8 +12,9 @@ import org.springframework.integration.channel.QueueChannel
 import org.springframework.http.HttpStatus
 
 /**
- * Integration test that will Spin up an instance of Jetty, run cgh-definitions-servives 
- * war and perform the REST service operations to test the SI configuration
+ * Integration test that requires an an instance of a servlet container, running cgh-definitions-services war in order
+ * to perform the REST service operations to test the SI configuration. When run with Gradle jetty will be started
+ * by the build when run through any other method then the services will have to be manually started.
  *
  * @author chris
  *
@@ -42,12 +43,6 @@ class RestConsumerIntegrationTest extends Specification {
         createDefinitionsRequestChannel.send(MessageBuilder.withPayload(expected).build())
 
         then: "a request to the definition reply channel with the expected definition id should return the expected defintion"
-        def doAssert = {throw null}
-        final handle = {
-            def actual = it.getPayload()
-            doAssert(actual)
-        }
-
         findDefinitionsRequestChannel.send(MessageBuilder.withPayload(expected.id).build())
         def actual = findDefinitionsReplyChannel.receive(1000).payload
         assert expected == actual: "Definition object: ${actual} returned from the find service does not match the expected value: ${expected}"
@@ -59,7 +54,6 @@ class RestConsumerIntegrationTest extends Specification {
         and: "a further request is sent to the definition channel with the expected definition id should return nothing"
         findDefinitionsRequestChannel.send(MessageBuilder.withPayload(id).build())
         final actualAfterDeletion = findDefinitionsReplyChannel.receive(1000).payload
-        println actualAfterDeletion
         assert HttpStatus.OK == actualAfterDeletion.statusCode: "Definition object: ${actualAfterDeletion.statusCode} returned from the find service does not match zero length string"
         assert null == actualAfterDeletion.body: "Body of a find request after deletiion should be null but was: ${actualAfterDeletion.body}"
     }

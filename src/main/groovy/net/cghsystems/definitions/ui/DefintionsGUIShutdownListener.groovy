@@ -3,9 +3,7 @@
  */
 package net.cghsystems.definitions.ui
 
-import groovy.lang.PackageScope
 
-@PackageScope
 class DefintionsGUIShutdownListener {
 
     private final listeners = []

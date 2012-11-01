@@ -1,6 +1,5 @@
 package net.cghsystems.definitions.ui;
 
-import groovy.lang.PackageScope
 
 import java.awt.Color
 import java.awt.Component
@@ -10,7 +9,6 @@ import javax.swing.BoxLayout
 import javax.swing.DefaultListCellRenderer
 import javax.swing.JList
 
-@PackageScope
 class StripeRenderer extends DefaultListCellRenderer {
 
     def listComponents = [:]
