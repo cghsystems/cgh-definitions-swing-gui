@@ -9,7 +9,7 @@
 
     <!-- Find Definitions -->
     <int:channel id="findDefinitionsRequestChannel"/>
-    <int:channel id="findDefinitionsReplyChannel">
+    <int:channel id="findDefinitionsReplyChannel" >
         <int:queue/>
     </int:channel>
 
@@ -38,7 +38,7 @@
     </int-http:outbound-channel-adapter>
 
     <!-- Delete -->
-    <int:channel id="deleteDefinitionsRequestChannel"/>
+    <int:channel id="deleteDefinitionsRequestChannel" datatype="java.lang.Integer"/>
 
     <int-http:outbound-channel-adapter
             url="http://localhost:8080/cgh-definitions-services/definition/delete/id/{id}"
