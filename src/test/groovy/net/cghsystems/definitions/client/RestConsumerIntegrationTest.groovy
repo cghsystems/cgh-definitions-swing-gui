@@ -1,4 +1,4 @@
-package net.cghsystems.definitions.client.ws
+package net.cghsystems.definitions.client
 
 import net.cghsystems.definitions.domain.Definition
 import org.springframework.integration.channel.DirectChannel

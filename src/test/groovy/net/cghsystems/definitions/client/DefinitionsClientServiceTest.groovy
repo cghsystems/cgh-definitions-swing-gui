@@ -1,4 +1,4 @@
-package net.cghsystems.definitions.ui.client;
+package net.cghsystems.definitions.client;
 
 
 import net.cghsystems.definitions.domain.Definition
@@ -11,23 +11,24 @@ import org.springframework.integration.support.MessageBuilder
 /**
  * @author chris
  */
-public class DefinitionsServiceConsumerTest extends Specification {
+public class DefinitionsClientServiceTest extends Specification {
 
-    DefinitionsServiceConsumer unit
+    DefinitionsClientService unit
 
     void setup() {
-        unit = new DefinitionsServiceConsumer()
+        unit = new DefinitionsClientService()
     }
 
     def "should request a message is deleted"() {
 
         given: "the unit has a delete definition channel"
         final deleteChannel = Mock(MessageChannel)
+
         ReflectionTestUtils.setField(unit, "deleteChannel", deleteChannel)
 
         when: unit.deleteDefinition(1)
 
-        then: "Delete is called"
+        then: "The definition id is sent in the payload of a message submitted to the deleteChannel"
         1 * deleteChannel.send({it.payload == 1})
     }
 
@@ -58,6 +59,8 @@ public class DefinitionsServiceConsumerTest extends Specification {
         assert actual == expectedDefinition
     }
 
+
+    //Create
     def "should request a message is created"() {
 
         given: "the unit has a create definition channel"
@@ -71,5 +74,12 @@ public class DefinitionsServiceConsumerTest extends Specification {
 
         then: "the create channel should have received the expected definition"
         1 * createChannel.send({it.payload == definition})
+    }
+
+    def "should throw illegal arg if the services cannot be found"() {
+        given: "the unit has a crearte definition channel"
+        and: "the definintion object is"
+        when: "a deinfition is created" //unit.createDefinition(definition)
+        then: "An illegal arg should be thrown"
     }
 }

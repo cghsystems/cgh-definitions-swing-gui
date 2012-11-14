@@ -1,4 +1,4 @@
-package net.cghsystems.definitions.ui;
+package net.cghsystems.definitions.client.desktop;
 
 
 import java.awt.Color

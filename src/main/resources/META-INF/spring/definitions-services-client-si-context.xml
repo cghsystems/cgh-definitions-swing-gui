@@ -38,7 +38,7 @@
     </int-http:outbound-channel-adapter>
 
     <!-- Delete -->
-    <int:channel id="deleteDefinitionsRequestChannel" datatype="java.lang.Integer"/>
+    <int:channel id="deleteDefinitionsRequestChannel"/>
 
     <int-http:outbound-channel-adapter
             url="http://localhost:8080/cgh-definitions-services/definition/delete/id/{id}"

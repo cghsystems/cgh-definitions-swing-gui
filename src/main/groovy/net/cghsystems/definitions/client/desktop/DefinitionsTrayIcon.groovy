@@ -1,15 +1,11 @@
-package net.cghsystems.definitions.ui
-
+package net.cghsystems.definitions.client.desktop
 
 import groovy.swing.SwingBuilder
 
-import java.awt.Frame
-import java.awt.MenuItem
-import java.awt.PopupMenu
-import java.awt.SystemTray
-import java.awt.TrayIcon
 import java.awt.event.ActionListener
 import java.awt.event.WindowAdapter
+import javax.annotation.Resource
+import java.awt.*
 
 class DefinitionsTrayIcon implements GUIShutdownEvent {
 
@@ -23,22 +19,25 @@ class DefinitionsTrayIcon implements GUIShutdownEvent {
     private static final IS_MINIMISED = 0;
 
 
-    private final actionListener =  {action ->
-        [ actionPerformed: {  action() } ] as ActionListener
+    private final actionListener = {action ->
+        [actionPerformed: { action() }] as ActionListener
     }
 
     private final showHide = { definitionsGUIDisplayStateMachine.updateState() }
+
+    /** Application icon */
+    @Resource(name = "iconImage")
+    private iconImage
 
     void addTrayIcon() {
         if (SystemTray.isSupported()) {
 
             addWindowListenersToFrame(frame)
 
-            def icon = getIconImage()
-            trayIcon = new TrayIcon(icon, title)
+            trayIcon = new TrayIcon(iconImage, title)
             trayIcon.setPopupMenu(getPopupMenu())
 
-            trayIcon.addActionListener(actionListener( { showHide() } ))
+            trayIcon.addActionListener(actionListener({ showHide() }))
             SystemTray.getSystemTray().add(trayIcon)
         }
     }
@@ -46,22 +45,18 @@ class DefinitionsTrayIcon implements GUIShutdownEvent {
     private void addWindowListenersToFrame(frame) {
         def swingBuilder = new SwingBuilder()
         frame.addWindowListener(
-                [windowClosing:{
-                        swingBuilder.edt { frame.setVisible(false) }
-                    },
-                    windowIconified:{
-                        swingBuilder.edt {
-                            int state = frame.getExtendedState()
-                            state = state | Frame.ICONIFIED
-                            frame.setExtendedState(state)
-                            frame.setVisible(false)
+                [windowClosing: {
+                    swingBuilder.edt { frame.setVisible(false) }
+                },
+                        windowIconified: {
+                            swingBuilder.edt {
+                                int state = frame.getExtendedState()
+                                state = state | Frame.ICONIFIED
+                                frame.setExtendedState(state)
+                                frame.setVisible(false)
+                            }
                         }
-                    }
-                ] as WindowAdapter )
-    }
-
-    private def getIconImage() {
-        new SwingBuilder().imageIcon(resource:'/document_text.png').getImage()
+                ] as WindowAdapter)
     }
 
     private def getPopupMenu() {

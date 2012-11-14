@@ -18,4 +18,5 @@ dependencies {
 
     testCompile 'org.mortbay.jetty:jetty:7.0.0.pre5'
     testCompile 'org.mortbay.jetty:jetty-webapp:7.0.0.pre4'
+    testCompile 'org.easytesting:fest-swing:1.2.1'
 }
