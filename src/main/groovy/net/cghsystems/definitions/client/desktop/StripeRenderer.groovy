@@ -1,9 +1,9 @@
-package net.cghsystems.definitions.ui
+package net.cghsystems.definitions.client.desktop;
+
 
 import java.awt.Color
 import java.awt.Component
 
-import javax.annotation.Resource
 import javax.swing.BorderFactory as BF
 import javax.swing.BoxLayout
 import javax.swing.DefaultListCellRenderer
@@ -12,11 +12,7 @@ import javax.swing.JList
 class StripeRenderer extends DefaultListCellRenderer {
 
     def listComponents = [:]
-
-    @Resource(name = "swingBuilder")
-    final builder
-
-    def currentlySelected
+    def builder, currentlySelected
 
     @Override
     Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
