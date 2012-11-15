@@ -19,13 +19,13 @@ import javax.swing.JFrame
  * @author: chris
  * @date: 14/11/2012
  */
-class DefinitionsDesktopClientTest {
+class DesktopClientComponentsTest {
 
-    DefinitionsDesktopClient unit
+    DesktopClientComponents unit
 
     @Before
     void before() {
-        unit = new DefinitionsDesktopClient(swingBuilder: new SwingBuilder())
+        unit = new DesktopClientComponents(swingBuilder: new SwingBuilder())
         FailOnThreadViolationRepaintManager.install()
     }
 

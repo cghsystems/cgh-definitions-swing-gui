@@ -10,6 +10,8 @@ import spock.lang.Specification
 import javax.annotation.Resource
 import org.springframework.integration.channel.QueueChannel
 import org.springframework.http.HttpStatus
+import net.cghsystems.definitions.client.desktop.ioc.DesktopApplicationContext
+import spock.lang.Shared
 
 /**
  * TODO Move to integration test folder
@@ -21,20 +23,18 @@ import org.springframework.http.HttpStatus
  * @author chris
  *
  */
-@ContextConfiguration("classpath:META-INF/spring/definitions-services-client-si-context.xml")
+@ContextConfiguration(classes = [DesktopApplicationContext])
 class RestConsumerIntegrationTest extends Specification {
 
-    @Resource(name = "findDefinitionsRequestChannel")
-    DirectChannel findDefinitionsRequestChannel
+    @Resource(name = "definitionsClientService")
+    DefinitionsClientService unit
 
-    @Resource(name = "findDefinitionsReplyChannel")
-    QueueChannel findDefinitionsReplyChannel
-
-    @Resource(name = "createDefinitionsRequestChannel")
-    DirectChannel createDefinitionsRequestChannel
-
-    @Resource(name = "deleteDefinitionsRequestChannel")
-    DirectChannel deleteDefinitionsRequestChannel
+    def "should establish connection to remote services"() {
+        when: "a ping an isAvailable request is sent to the server"
+        @Shared result = unit.isAvailable()
+        then: "the result should be positive"
+        assert result : "Was expecting server communication to be established"
+    }
 
     def "should create and then find and then delete definition from remote rest service"() {
 
@@ -42,20 +42,18 @@ class RestConsumerIntegrationTest extends Specification {
         def expected = new Definition("RestConsumerIntegrationTest-1", "RestConsumerIntegrationTest", "RestConsumerIntegrationTest", "RestConsumerIntegrationTest", 49)
 
         when: "Then expected definition is sent to the createDefinitionsReqestChannel"
-        createDefinitionsRequestChannel.send(MessageBuilder.withPayload(expected).build())
+        unit.createDefinition(expected)
 
         then: "a request to the definition reply channel with the expected definition id should return the expected defintion"
-        findDefinitionsRequestChannel.send(MessageBuilder.withPayload(expected.id).build())
-        def actual = findDefinitionsReplyChannel.receive(1000).payload
+        def actual = unit.findDefinition(expected.id)
         assert expected == actual: "Definition object: ${actual} returned from the find service does not match the expected value: ${expected}"
 
         and: "When a request is sent to the delete channel with the expected definition id should delete the expected defintion"
         final id = expected.id
-        deleteDefinitionsRequestChannel.send(MessageBuilder.withPayload(id).build())
+        unit.deleteDefinition(id)
 
         and: "a further request is sent to the definition channel with the expected definition id should return nothing"
-        findDefinitionsRequestChannel.send(MessageBuilder.withPayload(id).build())
-        final actualAfterDeletion = findDefinitionsReplyChannel.receive(1000).payload
+        final actualAfterDeletion = unit.findDefinition(id)
         assert HttpStatus.OK == actualAfterDeletion.statusCode: "Definition object: ${actualAfterDeletion.statusCode} returned from the find service does not match zero length string"
         assert null == actualAfterDeletion.body: "Body of a find request after deletiion should be null but was: ${actualAfterDeletion.body}"
     }

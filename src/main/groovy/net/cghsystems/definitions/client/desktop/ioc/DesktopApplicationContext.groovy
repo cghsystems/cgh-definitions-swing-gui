@@ -1,13 +1,15 @@
 package net.cghsystems.definitions.client.desktop.ioc
 
+import groovy.swing.SwingBuilder
 import net.cghsystems.definitions.client.DefinitionsClientService
 import net.cghsystems.definitions.client.desktop.DefinitionsDesktopClient
+import net.cghsystems.definitions.client.desktop.DefintionsGUIShutdownListener
+import net.cghsystems.definitions.client.desktop.DesktopClientComponents
+import net.cghsystems.definitions.client.desktop.StripeRenderer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.ImportResource
-import groovy.swing.SwingBuilder
-import net.cghsystems.definitions.client.desktop.DefintionsGUIShutdownListener
-import net.cghsystems.definitions.client.desktop.StripeRenderer
+import org.springframework.context.annotation.Scope
 
 /**
  * @author: chris
@@ -28,8 +30,9 @@ class DesktopApplicationContext {
     }
 
     @Bean
+    @Scope("prototype")
     def iconImage() {
-        new SwingBuilder().imageIcon(resource:'/document_text.png').getImage()
+        new SwingBuilder().imageIcon(resource: '/document_text.png').getImage()
     }
 
     @Bean
@@ -43,7 +46,12 @@ class DesktopApplicationContext {
     }
 
     @Bean
-    def stripRenderer(swingBuilder) {
-        new StripeRenderer(builder:swingBuilder)
+    def desktopClientComponents() {
+        new DesktopClientComponents()
+    }
+
+    @Bean
+    def stripeRenderer(swingBuilder) {
+        new StripeRenderer(builder: swingBuilder)
     }
 }

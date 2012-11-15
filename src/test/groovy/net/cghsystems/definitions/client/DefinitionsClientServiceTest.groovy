@@ -7,6 +7,9 @@ import org.springframework.test.util.ReflectionTestUtils
 import spock.lang.Specification
 import org.springframework.integration.core.PollableChannel
 import org.springframework.integration.support.MessageBuilder
+import org.springframework.integration.channel.QueueChannel
+import spock.lang.Shared
+import org.springframework.integration.MessagingException
 
 /**
  * @author chris
@@ -17,6 +20,46 @@ public class DefinitionsClientServiceTest extends Specification {
 
     void setup() {
         unit = new DefinitionsClientService()
+    }
+
+    def "should establish server communication"() {
+
+        given: "the unit has a pingChannel"
+        final pingChannel = Mock(MessageChannel)
+        ReflectionTestUtils.setField(unit, "pingChannel", pingChannel)
+
+        when: "is available is called"
+        assert unit.isAvailable() : "Was expecting a connection to the server be established"
+
+        then: "The pingChannel should return true"
+        1 * pingChannel.send({it.payload == "A ping request from DefinitionsClientService"}) >> true
+    }
+
+    def "should not establish server communication if the ping request is not sent"() {
+
+        given: "the unit has a pingChannel"
+        final pingChannel = Mock(MessageChannel)
+        ReflectionTestUtils.setField(unit, "pingChannel", pingChannel)
+
+        when: "is available is called"
+        assert unit.isAvailable() : "Was expecting a connection to the server be established"
+
+        then: "The pingChannel should return false"
+        1 * pingChannel.send({it.payload == "A ping request from DefinitionsClientService"}) >> false
+    }
+
+    //START HERE WORK OUT HOW TO THROW ExceptionsFROM SPOCK
+    def "should not establish server communication if the message channel throws an exception"() {
+
+        given: "the unit has a pingChannel"
+        final pingChannel = Mock(MessageChannel)
+        ReflectionTestUtils.setField(unit, "pingChannel", pingChannel)
+
+        when: "is available is called"
+        assert unit.isAvailable() : "Was expecting a connection to the server be established"
+
+        then: "The pingChannel should return false"
+        1 * pingChannel.send({it.payload == "A ping request from DefinitionsClientService"})
     }
 
     def "should request a message is deleted"() {

@@ -25,11 +25,7 @@ class DefinitionsTrayIcon implements GUIShutdownEvent {
 
     private final showHide = { definitionsGUIDisplayStateMachine.updateState() }
 
-    /** Application icon */
-    @Resource(name = "iconImage")
-    private iconImage
-
-    void addTrayIcon() {
+    void addTrayIcon(iconImage) {
         if (SystemTray.isSupported()) {
 
             addWindowListenersToFrame(frame)

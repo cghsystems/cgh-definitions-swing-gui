@@ -19,7 +19,13 @@ class DesktopMain {
     ApplicationContext ctx = new AnnotationConfigApplicationContext(DesktopApplicationContext)
 
     final start() {
-        final gui = ctx.getBean("definitionsDesktopClient")
-        gui.show()
+
+        final clientService = ctx.getBean("definitionsClientService")
+        if (clientService.isAvailable()) {
+            final gui = ctx.getBean("definitionsDesktopClient")
+            gui.show()
+        } else {
+            gui.showSorry();
+        }
     }
 }

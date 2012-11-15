@@ -9,7 +9,7 @@
 
     <!-- Find Definitions -->
     <int:channel id="findDefinitionsRequestChannel"/>
-    <int:channel id="findDefinitionsReplyChannel" >
+    <int:channel id="findDefinitionsReplyChannel">
         <int:queue/>
     </int:channel>
 
@@ -47,6 +47,13 @@
         <int-http:uri-variable name="id" expression="payload"/>
     </int-http:outbound-channel-adapter>
 
+    <!-- Ping -->
+    <int:channel id="pingChannel"/>
+    <int-http:outbound-channel-adapter channel="pingChannel"
+                                       url="http://localhost:8080/cgh-definitions-services/definition/ping/message/{message}"
+                                       http-method="GET">
+        <int-http:uri-variable name="message" expression="payload"/>
+    </int-http:outbound-channel-adapter>
 
     <bean id="jsonConverter"
           class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
