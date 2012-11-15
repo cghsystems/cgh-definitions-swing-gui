@@ -24,3 +24,4 @@ build
 .gradle
 .scala_dependencies
 out
+.idea
