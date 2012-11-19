@@ -55,7 +55,8 @@ public class DefinitionsClientServiceTest extends Specification {
         assert !unit.isAvailable(): "Was not expecting a connection to the server be established as the ping send event throws an exception"
 
         then: "The pingChannel should return false"
-        1 * pingChannel.send({it.payload == "A ping request from DefinitionsClientService"}) >> { throw new Exception("Error") }
+        1 * pingChannel.send({it.payload == "A ping request from DefinitionsClientService"}) >>
+                { throw new Exception("Error") }
     }
 
     def "should request a message is deleted"() {
