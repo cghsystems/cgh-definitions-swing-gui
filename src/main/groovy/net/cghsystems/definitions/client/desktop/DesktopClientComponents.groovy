@@ -19,6 +19,8 @@ class DesktopClientComponents {
     @Resource(name = "swingBuilder")
     private SwingBuilder swingBuilder
 
+    def shutdownListener
+
     def buttonPanel() {
         swingBuilder.panel(constraints: BorderLayout.SOUTH, opaque: true, background: Color.WHITE) {
             flowLayout()
@@ -42,7 +44,7 @@ class DesktopClientComponents {
                 }).show()
             })
 
-            button("Close", mnemonic: "C", name: "close", actionPerformed: { shutDownListener.notifyOnClose() })
+            button("Close", mnemonic: "C", name: "close", actionPerformed: { shutdownListener.notifyOnClose() })
         }
     }
 
