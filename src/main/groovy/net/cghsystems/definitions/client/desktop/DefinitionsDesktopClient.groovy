@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent
 import javax.annotation.Resource
 import javax.swing.BoxLayout
 import javax.swing.JFrame
+import groovy.swing.SwingBuilder
 
 /**
  * The main container of the Definitions SWING GUI. This GUI renders the main view that displays all of the definitions,
@@ -28,7 +29,7 @@ import javax.swing.JFrame
 class DefinitionsDesktopClient {
 
     @Resource(name = "swingBuilder")
-    private swingBuilder
+    private SwingBuilder swingBuilder
 
     /** To notify listeners that the application is closing to allow a graceful shutdown */
     @Resource(name = "shutdownListener")
@@ -64,10 +65,17 @@ class DefinitionsDesktopClient {
                 searchPanel()
                 desktopClientComponents.buttonPanel()
             }
+
+            frame.pack()
+
             def sm = new DefinitionsGUIDisplayStateMachine(component: frame)
             addApplicationTrayIcon(title, frame, sm, shutDownListener)
         }
         searchForNoteAndDisplayResults("")
+    }
+
+    void showSorry() {
+        log.info("Cannot start the Desktop client at this time as there is no available service")
     }
 
 

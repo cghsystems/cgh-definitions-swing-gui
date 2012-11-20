@@ -3,9 +3,10 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:int-http="http://www.springframework.org/schema/integration/http"
        xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-2.2.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.2.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <!-- Find Definitions -->
     <int:channel id="findDefinitionsRequestChannel"/>
@@ -50,11 +51,20 @@
     <!-- Ping -->
     <int:channel id="pingChannel"/>
     <int-http:outbound-channel-adapter channel="pingChannel"
-                                       url="http://localhost:8080/cgh-definitions-services/definition/ping/message/{message}"
+                                       url="${definition.services.target}/ping/message/{message}"
                                        http-method="GET">
         <int-http:uri-variable name="message" expression="payload"/>
     </int-http:outbound-channel-adapter>
 
     <bean id="jsonConverter"
           class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+
+    <beans profile="cloud">
+        <context:property-placeholder location="/META-INF/spring/cloudfoudry-definition.properties"/>
+    </beans>
+
+    <beans profile="localhost">
+        <context:property-placeholder location="/META-INF/spring/localhost-definition.properties"/>
+    </beans>
+
 </beans>

@@ -6,12 +6,14 @@ import org.springframework.integration.core.PollableChannel
 import org.springframework.integration.support.MessageBuilder
 
 import javax.annotation.Resource
+import groovy.util.logging.Log4j
 
 /**
  * The outbound service for clients of any type to provide mechanism of communication with the definition services.
  *
  * @author chris
  */
+@Log4j
 class DefinitionsClientService {
 
     @Resource(name = "deleteDefinitionsRequestChannel")
@@ -62,6 +64,7 @@ class DefinitionsClientService {
             pingChannel.send(MessageBuilder.withPayload("A ping request from DefinitionsClientService").build())
             true
         } catch (e) {
+            log.error("Exception talking to the services", e)
             false
         }
     }

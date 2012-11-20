@@ -3,6 +3,8 @@ package net.cghsystems.definitions.client.desktop
 import net.cghsystems.definitions.client.desktop.ioc.DesktopApplicationContext
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
+import org.springframework.core.env.ConfigurableEnvironment
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext
 
 /**
  * Main class of the Definitions Desktop client.
@@ -13,17 +15,20 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 class DesktopMain {
 
     static main(args) {
+        System.setProperty("spring.profiles.default", "cloud")
         new DesktopMain().start()
     }
 
-    ApplicationContext ctx = new AnnotationConfigApplicationContext(DesktopApplicationContext)
+    AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(DesktopApplicationContext)
+
 
     final start() {
-
         final clientService = ctx.getBean("definitionsClientService")
+        final gui = ctx.getBean("definitionsDesktopClient")
+
+
         if (clientService.isAvailable()) {
-            final gui = ctx.getBean("definitionsDesktopClient")
-            gui.show()
+            gui.showMain()
         } else {
             gui.showSorry();
         }

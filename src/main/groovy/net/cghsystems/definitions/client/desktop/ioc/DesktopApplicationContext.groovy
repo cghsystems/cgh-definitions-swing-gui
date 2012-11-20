@@ -10,11 +10,13 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.ImportResource
 import org.springframework.context.annotation.Scope
+import org.springframework.context.annotation.Profile
 
 /**
  * @author: chris
  * @date: 14/11/2012
  */
+
 @Configuration
 @ImportResource("classpath:META-INF/spring/definitions-services-client-si-context.xml")
 class DesktopApplicationContext {

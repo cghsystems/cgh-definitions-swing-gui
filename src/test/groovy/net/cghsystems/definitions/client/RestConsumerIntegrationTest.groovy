@@ -12,6 +12,7 @@ import org.springframework.integration.channel.QueueChannel
 import org.springframework.http.HttpStatus
 import net.cghsystems.definitions.client.desktop.ioc.DesktopApplicationContext
 import spock.lang.Shared
+import org.springframework.test.context.ActiveProfiles
 
 /**
  * TODO Move to integration test folder
@@ -24,6 +25,7 @@ import spock.lang.Shared
  *
  */
 @ContextConfiguration(classes = [DesktopApplicationContext])
+@ActiveProfiles("localhost")
 class RestConsumerIntegrationTest extends Specification {
 
     @Resource(name = "definitionsClientService")
