@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package net.cghsystems.definitions.client.desktop
 
@@ -24,9 +24,15 @@ class DefintionsGUIShutdownListener {
     /**
      * Notifies all registered listeners that the application is about to shutdown.
      */
-    def notifyOnClose() {
-        listeners.each { it.onClose() }
+    def notifyOnClose(closure = {}) {
+        listeners.each {
+            try {
+                it.onClose()
+            } catch (e) {
+                log.error("There have been errors closing down the gui application:", e)
+            }
+        }
         log.info("Closing Definitions Swing Client")
-        System.exit(0)
+        closure.call()
     }
 }
