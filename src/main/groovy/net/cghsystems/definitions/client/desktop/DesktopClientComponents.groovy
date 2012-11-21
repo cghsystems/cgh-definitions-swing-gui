@@ -1,13 +1,14 @@
 package net.cghsystems.definitions.client.desktop
 
+import groovy.swing.SwingBuilder
+import groovy.util.logging.Log4j
+import net.cghsystems.definitions.domain.Definition
+
 import java.awt.BorderLayout
 import java.awt.Color
-import net.cghsystems.definitions.domain.Definition
-import javax.swing.BoxLayout
-import groovy.swing.SwingBuilder
 import javax.annotation.Resource
+import javax.swing.BoxLayout
 import javax.swing.JOptionPane
-import groovy.util.logging.Log4j
 
 /**
  * @author: chris
@@ -45,7 +46,9 @@ class DesktopClientComponents {
                 }).show()
             })
 
-            button("Close", mnemonic: "C", name: "close", actionPerformed: { shutdownListener.notifyOnClose() })
+            button("Close", mnemonic: "C", name: "close", actionPerformed: {
+                shutdownListener.notifyOnClose({System.exit(0)})
+            })
         }
     }
 
