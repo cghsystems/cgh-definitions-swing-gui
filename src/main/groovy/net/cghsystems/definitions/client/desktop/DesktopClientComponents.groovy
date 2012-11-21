@@ -19,6 +19,7 @@ class DesktopClientComponents {
     @Resource(name = "swingBuilder")
     private SwingBuilder swingBuilder
 
+    @Resource(name = "shutdownListener")
     def shutdownListener
 
     def buttonPanel() {

@@ -23,6 +23,9 @@ class DesktopMain {
 
 
     final start() {
+
+        ctx.registerShutdownHook()
+
         final clientService = ctx.getBean("definitionsClientService")
         final gui = ctx.getBean("definitionsDesktopClient")
 

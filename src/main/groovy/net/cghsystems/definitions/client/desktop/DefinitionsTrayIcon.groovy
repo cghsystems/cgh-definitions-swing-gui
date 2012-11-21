@@ -6,7 +6,9 @@ import java.awt.event.ActionListener
 import java.awt.event.WindowAdapter
 import javax.annotation.Resource
 import java.awt.*
+import groovy.util.logging.Log4j
 
+@Log4j
 class DefinitionsTrayIcon implements GUIShutdownEvent {
 
     private definitionsGUIDisplayStateMachine
@@ -76,7 +78,7 @@ class DefinitionsTrayIcon implements GUIShutdownEvent {
 
     @Override
     void onClose() {
-        println "Closing TrayIcon"
+        log.info "Closing TrayIcon"
         SystemTray.getSystemTray().remove(trayIcon)
     }
 }

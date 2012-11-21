@@ -16,6 +16,8 @@ import javax.annotation.Resource
 import javax.swing.BoxLayout
 import javax.swing.JFrame
 import groovy.swing.SwingBuilder
+import org.springframework.beans.factory.annotation.Value
+import com.sun.xml.internal.bind.v2.TODO
 
 /**
  * The main container of the Definitions SWING GUI. This GUI renders the main view that displays all of the definitions,
@@ -50,12 +52,19 @@ class DefinitionsDesktopClient {
     @Resource(name = "iconImage")
     private iconImage
 
+
+    @Resource(name = "shutdownListener")
+    private shutdownListener
+
     private resultsList
 
     private currentSelectedLocation
 
+    //TODO Ioc @Value
+    private title = "title"
+
+
     void showMain() {
-        final title = 'Definitions'
         swingBuilder.edt {
             def frame = frame(title: title, size: [100, 600], show: true, defaultCloseOperation: getDefaultCloseOperation(),
                     pack: true, iconImage: iconImage) {
@@ -65,8 +74,6 @@ class DefinitionsDesktopClient {
                 searchPanel()
                 desktopClientComponents.buttonPanel()
             }
-
-            frame.pack()
 
             def sm = new DefinitionsGUIDisplayStateMachine(component: frame)
             addApplicationTrayIcon(title, frame, sm, shutDownListener)
