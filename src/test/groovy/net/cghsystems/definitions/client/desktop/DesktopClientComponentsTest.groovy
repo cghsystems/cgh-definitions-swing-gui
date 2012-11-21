@@ -13,6 +13,7 @@ import spock.lang.Specification
 
 import javax.swing.JDialog
 import javax.swing.JFrame
+import spock.lang.Shared
 
 /**
  * @author: chris
@@ -75,33 +76,6 @@ class DesktopClientComponentsTest extends Specification {
     }
 
     @RunsInEDT
-    def "addOrEditNoteDialogWithDefinition panel should render with Deifnition object"() {
-
-        final title = "title"
-        final definition = new Definition(name: "name", definition: "definition", description: "description")
-
-        given: "an add or edit dialog panel"
-        WindowFixture f = GuiActionRunner.execute([executeInEDT: {
-            JDialog d = unit.addOrEditNoteDialog(title, definition, null)
-            new DialogFixture(d)
-        }] as GuiQuery)
-
-        when: "The panel is visible"
-        f.show()
-
-        then: "The following buttons should be visible and have the correct text"
-        ["name", "definition", "description"].each {
-            f.label("${it}-label").requireVisible()
-            f.textBox("${it}-textfield").requireVisible().requireText(definition."$it")
-        }
-
-        and: "The addedit button should be visible"
-        f.button("addedit-button").requireVisible()
-
-        f.cleanUp()
-    }
-
-    @RunsInEDT
     def "addOrEditNoteDialog should render with null definition"() {
 
         final title = "title"
@@ -129,7 +103,7 @@ class DesktopClientComponentsTest extends Specification {
     }
 
     @RunsInEDT
-    def "addOrEditNoteDialogWithNullDefinition should send request to add service when add is clicked"() {
+    def "addOrEditNoteDialogWithNullDefinition should send add request when addOrEditNoteDialog is passed null definition"() {
 
         final title = "title"
         boolean executed = false
@@ -151,14 +125,58 @@ class DesktopClientComponentsTest extends Specification {
         when: "The panel is visible"
         f.show()
 
-        and: "a name, definition and description are added"
+        then: "a name, definition and description are added"
         f.textBox("name-textfield").setText(expectedName)
         f.textBox("definition-textfield").setText(expectedDefinition)
         f.textBox("description-textfield").setText(expectedDescription)
 
-        then: "when the add button is clicked"
+        and: "when the add button is clicked"
         f.button("addedit-button").click()
 
+        and: "The addClosure should have been called"
+        assert executed: "The addClossure should have been executed"
+
+        f.cleanUp()
+    }
+
+    @RunsInEDT
+    def "addOrEditNoteDialogWithNullDefinition should send edit request addOrEditNoteDialog is passed existing definition"() {
+
+        def title ="title"
+        def executed = false
+        def (expectedId, expectedName, expectedDefinition, expectedDescription) = ["1", "edited-name", "edited-definition", "edited-description"]
+        final definitionObject = new Definition(id: 1, name: "expectedName", definition: "expectedDefinition", description: "expectedDescription")
+
+        final addClosure = { id, name, definition, description ->
+            assert id == expectedId
+            assert name == expectedName
+            assert definition == expectedDefinition
+            assert description == expectedDescription
+            executed = true
+        }
+
+        given: "an add or edit dialog panel with a definition"
+        WindowFixture f = GuiActionRunner.execute([executeInEDT: {
+            JDialog d = unit.addOrEditNoteDialog(title, definitionObject, addClosure)
+            new DialogFixture(d)
+        }] as GuiQuery)
+
+        when: "The panel is visible"
+        f.show()
+
+        then: "The following buttons should be visible and have the correct text"
+        ["name", "definition", "description"].each {
+            f.label("${it}-label").requireVisible()
+            f.textBox("${it}-textfield").requireVisible().requireText(definitionObject."$it")
+        }
+
+        and: "when the text fields are changed"
+        f.textBox("name-textfield").setText(expectedName)
+        f.textBox("definition-textfield").setText(expectedDefinition)
+        f.textBox("description-textfield").setText(expectedDescription)
+
+        and: "when the add button is clicked again"
+        f.button("addedit-button").click()
 
         and: "The addClosure should have been called"
         assert executed: "The addClossure should have been executed"
