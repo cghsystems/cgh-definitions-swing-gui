@@ -71,7 +71,7 @@ class DesktopClientComponentsTest extends Specification {
         f.button("close").click()
 
         then: "The shutdown listener should receive request"
-        1 * unit.shutdownListener.notifyOnClose()
+        1 * unit.shutdownListener.notifyOnClose(_)
 
         f.cleanUp()
     }
