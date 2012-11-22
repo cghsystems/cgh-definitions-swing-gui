@@ -6,6 +6,8 @@ import java.awt.BorderLayout
 import javax.annotation.Resource
 
 /**
+ * Components that displays the Definitions to the user.
+ *
  * @author: chris
  * @date: 22/11/2012
  */
@@ -25,7 +27,12 @@ class ResultPanel {
         }
     }
 
-    def notifyOfDataChange(data) {
+    /**
+     * Receives a list of Definitions to be displayed in the Results panel.
+     *
+     * @param data
+     */
+    void notifyOfDataChange(data) {
         swingBuilder.edt {
             resultList.listData = data
         }

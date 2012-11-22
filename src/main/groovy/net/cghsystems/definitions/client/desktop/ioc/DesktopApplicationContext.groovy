@@ -33,8 +33,8 @@ class DesktopApplicationContext {
 
     @Bean
     @Scope("prototype")
-    def iconImage() {
-        new SwingBuilder().imageIcon(resource: '/document_text.png').getImage()
+    def iconImage(swingBuilder) {
+        swingBuilder.imageIcon(resource: '/document_text.png').getImage()
     }
 
     @Bean
@@ -43,7 +43,7 @@ class DesktopApplicationContext {
     }
 
     @Bean
-    SwingBuilder swingBuilder() {
+    def swingBuilder() {
         new SwingBuilder()
     }
 
@@ -53,7 +53,7 @@ class DesktopApplicationContext {
     }
 
     @Bean
-    StripeRenderer stripeRenderer() {
+    def stripeRenderer() {
         new StripeRenderer()
     }
 
