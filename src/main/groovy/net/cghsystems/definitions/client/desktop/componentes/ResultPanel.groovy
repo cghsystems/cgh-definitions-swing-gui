@@ -22,7 +22,7 @@ class ResultPanel {
 
     def resultPanel() {
         swingBuilder.scrollPane(constraints: BorderLayout.CENTER) {
-            resultList = list(fixedCellWidth: 600, fixedCellHeight: 75, cellRenderer: stripeRenderer)
+            resultList = list(name: "resultList", fixedCellWidth: 600, fixedCellHeight: 75, cellRenderer: stripeRenderer)
         }
     }
 

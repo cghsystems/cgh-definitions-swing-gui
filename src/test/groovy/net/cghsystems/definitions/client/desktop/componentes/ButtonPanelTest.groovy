@@ -1,4 +1,4 @@
-package net.cghsystems.definitions.client.desktop
+package net.cghsystems.definitions.client.desktop.componentes
 
 
 import groovy.swing.SwingBuilder
@@ -15,6 +15,7 @@ import spock.lang.Specification
 
 import javax.swing.JDialog
 import javax.swing.JFrame
+import net.cghsystems.definitions.client.desktop.DefintionsGUIShutdownListener
 
 /**
  * @author: chris
