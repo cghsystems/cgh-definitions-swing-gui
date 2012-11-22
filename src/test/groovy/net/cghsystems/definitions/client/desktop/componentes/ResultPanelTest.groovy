@@ -11,6 +11,7 @@ import org.fest.swing.fixture.JListFixture
 import org.fest.swing.core.BasicRobot
 import org.fest.swing.fixture.JScrollPaneFixture
 import net.cghsystems.definitions.domain.Definition
+import org.fest.swing.annotation.RunsInEDT
 
 /**
  * @author: chris
@@ -26,6 +27,7 @@ class ResultPanelTest extends Specification
         this.unit = new ResultPanel(swingBuilder: builder, stripeRenderer: new StripeRenderer(builder: builder))
     }
 
+    @RunsInEDT
     def "Should display and update results list"() {
 
         given: "A ResultPanel"

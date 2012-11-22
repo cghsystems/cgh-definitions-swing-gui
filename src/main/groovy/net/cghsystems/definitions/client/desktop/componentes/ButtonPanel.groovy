@@ -31,29 +31,62 @@ class ButtonPanel {
     @Resource(name = "resultsPanel")
     def resultsPanel
 
+
+    def addDefinitionAction = {id, name, definitiion, description ->
+        definitionsClientService.createDefinition(new Definition(id: 1, name: name,
+                definition: definitiion,
+                description: description,
+                definitionCategoryId: 1))
+
+        searchForDefinitionAndDisplayResults(name)
+
+    }
+
+    def editDefinitionAction = {id, name, definitiion, description ->
+        ds.edit(id, name, definitiion, description)
+        searchForDefinitionAndDisplayResults(name)
+    }
+
+    /**
+     * The action that is executed on the 'delete' event. This is triggered on the click of the 'Delete' button
+     * contained in the button panel
+     */
+    def deleteNoteDialogAction = {
+
+        final toDelete = stripeRender.currentlySelected?.id ?: ""
+        def optionPane = swingBuilder.optionPane()
+
+        def nothingToDelete = {
+            optionPane.showMessageDialog(null, "Please select a Note to delete", "Nothing to Delete", JOptionPane.PLAIN_MESSAGE)
+        }
+
+        def delete = {
+            def options = ["Yes", "No"] as Object[]
+            def choice = optionPane.showOptionDialog(null, "Do you want to delete ${stripeRender.currentlySelected.name}", 'Delete Note',
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, "")
+
+            if (options[choice] == "Yes") {
+                log.info("Will delete definition with id: ${toDelete}")
+                definitionsClientService.deleteDefinition(toDelete as Integer)
+                searchForDefinitionAndDisplayResults("")
+            }
+        }
+
+        toDelete == "" ? nothingToDelete() : delete()
+    }
+
     final buttonPanel() {
         swingBuilder.panel(constraints: BorderLayout.SOUTH, opaque: true, background: Color.WHITE) {
             flowLayout()
 
             button("Add", mnemonic: "A", name: "add-definition", actionPerformed: {
-                addOrEditNoteDialog("Add", null, {id, name, definitiion, description ->
-                    definitionsClientService.createDefinition(new Definition(id: 1, name: name,
-                            definition: definitiion,
-                            description: description,
-                            definitionCategoryId: 1))
-
-                    searchForNoteAndDisplayResults(name)
-
-                }).show()
+                addOrEditDefinitionDialog("Add", null, addDefinitionAction).show()
             })
 
             button("Delete", mnemonic: "D", name: "delete-definition", actionPerformed: deleteNoteDialogAction)
 
             button("Edit", mnemonic: "E", name: "edit-definition", actionPerformed: {
-                addOrEditNoteDialog("Edit", stripeRenderer.currentlySelected, {id, name, definitiion, description ->
-                    ds.edit(id, name, definitiion, description)
-                    searchForNoteAndDisplayResults(name)
-                }).show()
+                addOrEditDefinitionDialog("Edit", stripeRenderer.currentlySelected, editDefinitionAction).show()
             })
 
             button("Close", mnemonic: "C", name: "close", actionPerformed: {
@@ -62,7 +95,7 @@ class ButtonPanel {
         }
     }
 
-    void searchForNoteAndDisplayResults(id) {
+    void searchForDefinitionAndDisplayResults(id) {
         swingBuilder.doOutside {
             log.debug("Searching for definition with id: ${id}")
             try {
@@ -80,7 +113,7 @@ class ButtonPanel {
     }
 
 
-    def addOrEditNoteDialog(title, currentlySelected, addOrEditNote) {
+    def addOrEditDefinitionDialog(title, currentlySelected, addOrEditNote) {
         swingBuilder.dialog(id: 'addOrEditDialog', modal: true, title: "${title} Note", size: [400, 220]) {
             panel(background: Color.WHITE, opaque: true) {
                 boxLayout(axis: BoxLayout.Y_AXIS)
@@ -105,33 +138,5 @@ class ButtonPanel {
                 })
             }
         }
-    }
-
-    /**
-     * The action that is executed on the 'delete' event. This is triggered on the click of the 'Delete' button
-     * contained in the button panel
-     */
-    private final deleteNoteDialogAction = {
-
-        final toDelete = stripeRender.currentlySelected?.id ?: ""
-        def optionPane = swingBuilder.optionPane()
-
-        def nothingToDelete = {
-            optionPane.showMessageDialog(null, "Please select a Note to delete", "Nothing to Delete", JOptionPane.PLAIN_MESSAGE)
-        }
-
-        def delete = {
-            def options = ["Yes", "No"] as Object[]
-            def choice = optionPane.showOptionDialog(null, "Do you want to delete ${stripeRender.currentlySelected.name}", 'Delete Note',
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, "")
-
-            if (options[choice] == "Yes") {
-                log.info("Will delete definition with id: ${toDelete}")
-                definitionsClientService.deleteDefinition(toDelete as Integer)
-                searchForNoteAndDisplayResults("")
-            }
-        }
-
-        toDelete == "" ? nothingToDelete() : delete()
     }
 }

@@ -4,7 +4,6 @@ import groovy.swing.SwingBuilder
 
 import java.awt.BorderLayout
 import javax.annotation.Resource
-import javax.swing.JList
 
 /**
  * @author: chris
@@ -27,6 +26,8 @@ class ResultPanel {
     }
 
     def notifyOfDataChange(data) {
-        resultList.listData = data
+        swingBuilder.edt {
+            resultList.listData = data
+        }
     }
 }

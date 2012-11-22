@@ -76,7 +76,7 @@ class DefinitionsDesktopClient {
             def sm = new DefinitionsGUIDisplayStateMachine(component: frame)
             addApplicationTrayIcon(title, frame, sm, shutDownListener)
         }
-        buttonPanel.searchForNoteAndDisplayResults("")
+        buttonPanel.searchForDefinitionAndDisplayResults("")
     }
 
     void showSorry() {
@@ -87,10 +87,10 @@ class DefinitionsDesktopClient {
 
         final keyListener = [keyTyped: {
             final def handleEscape = {
-                searchForNoteAndDisplayResults("")
+                searchForDefinitionAndDisplayResults("")
                 it.source.text = ""
             }
-            it.keyChar == KeyEvent.VK_ESCAPE ? handleEscape(it) : searchForNoteAndDisplayResults(it.source.text)
+            it.keyChar == KeyEvent.VK_ESCAPE ? handleEscape(it) : searchForDefinitionAndDisplayResults(it.source.text)
         }] as KeyAdapter
 
         final addButtonGroup = {
@@ -105,7 +105,7 @@ class DefinitionsDesktopClient {
 
                                 log.info("NEED TO IMPLEMENT ds.updateCurrentStoreSource(it.source.text)")
 
-                                searchForNoteAndDisplayResults("")
+                                searchForDefinitionAndDisplayResults("")
                             })
                 }
             }

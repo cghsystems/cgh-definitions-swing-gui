@@ -2,7 +2,7 @@ package net.cghsystems.definitions.client.desktop.componentes
 
 
 import groovy.swing.SwingBuilder
-import net.cghsystems.definitions.client.desktop.componentes.ButtonPanel
+
 import net.cghsystems.definitions.domain.Definition
 import org.fest.swing.annotation.RunsInEDT
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager
@@ -87,7 +87,7 @@ class ButtonPanelTest extends Specification {
 
         given: "an add or edit dialog panel with a null definition"
         WindowFixture f = GuiActionRunner.execute([executeInEDT: {
-            JDialog d = unit.addOrEditNoteDialog(title, definition, null)
+            JDialog d = unit.addOrEditDefinitionDialog(title, definition, null)
             new DialogFixture(d)
         }] as GuiQuery)
 
@@ -122,7 +122,7 @@ class ButtonPanelTest extends Specification {
 
         given: "an add or edit dialog panel with a null definition"
         WindowFixture f = GuiActionRunner.execute([executeInEDT: {
-            JDialog d = unit.addOrEditNoteDialog(title, null, addClosure)
+            JDialog d = unit.addOrEditDefinitionDialog(title, null, addClosure)
             new DialogFixture(d)
         }] as GuiQuery)
 
@@ -161,7 +161,7 @@ class ButtonPanelTest extends Specification {
 
         given: "an add or edit dialog panel with a definition"
         WindowFixture f = GuiActionRunner.execute([executeInEDT: {
-            JDialog d = unit.addOrEditNoteDialog(title, definitionObject, addClosure)
+            JDialog d = unit.addOrEditDefinitionDialog(title, definitionObject, addClosure)
             new DialogFixture(d)
         }] as GuiQuery)
 
@@ -183,7 +183,7 @@ class ButtonPanelTest extends Specification {
         f.button("addedit-button").click()
 
         and: "The addClosure should have been called"
-        assert executed: "The addClossure should have been executed"
+        assert executed: "The edit closure should have been executed"
 
         f.cleanUp()
     }
