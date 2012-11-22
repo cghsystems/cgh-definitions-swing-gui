@@ -20,7 +20,7 @@ import javax.swing.JFrame
  * @author: chris
  * @date: 14/11/2012
  */
-class DesktopClientComponentsTest extends Specification {
+class ButtonPanelTest extends Specification {
 
 
     ButtonPanel unit
