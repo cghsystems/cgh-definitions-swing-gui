@@ -1,8 +1,8 @@
 package net.cghsystems.definitions.client.desktop.componentes
 
-
 import groovy.swing.SwingBuilder
-
+import net.cghsystems.definitions.client.DefinitionsClientService
+import net.cghsystems.definitions.client.desktop.DefintionsGUIShutdownListener
 import net.cghsystems.definitions.domain.Definition
 import org.fest.swing.annotation.RunsInEDT
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager
@@ -15,7 +15,6 @@ import spock.lang.Specification
 
 import javax.swing.JDialog
 import javax.swing.JFrame
-import net.cghsystems.definitions.client.desktop.DefintionsGUIShutdownListener
 
 /**
  * @author: chris
@@ -146,7 +145,7 @@ class ButtonPanelTest extends Specification {
     @RunsInEDT
     def "addOrEditNoteDialogWithNullDefinition should send edit request addOrEditNoteDialog is passed existing definition"() {
 
-        def title ="title"
+        def title = "title"
         def executed = false
         def (expectedId, expectedName, expectedDefinition, expectedDescription) = ["1", "edited-name", "edited-definition", "edited-description"]
         final definitionObject = new Definition(id: 1, name: "expectedName", definition: "expectedDefinition", description: "expectedDescription")
@@ -186,5 +185,34 @@ class ButtonPanelTest extends Specification {
         assert executed: "The edit closure should have been executed"
 
         f.cleanUp()
+    }
+
+    def "should execute addDefinitionAction"() {
+
+        def description = "description"
+        def definition = "definition"
+        def name = "name"
+
+        final definitionObject = new Definition(id:  1, name: name, description: description, definition: definition, definitionCategoryId: 1)
+
+        given: "a definitionsClientService"
+        final definitionsClientService = Mock(DefinitionsClientService)
+        unit.definitionsClientService = definitionsClientService
+
+        and: "and a result panel"
+        final resultsPanel = Mock(ResultPanel)
+        unit.resultsPanel = resultsPanel
+
+        when: "addDefinitionIsExecuted"
+        unit.addOrUpdateDefinitionAction.call(1, name, definition, description)
+
+        then: "The definition client service should be called with the expected definition"
+        1 * definitionsClientService.createDefinition({it == definitionObject})
+
+        and: "a new search is made to get the new definitions"
+        1 * definitionsClientService.findDefinition(1) >> definitionObject
+
+        and: "the results panel is called to update the view with the new data"
+        1 * resultsPanel.notifyOfDataChange({it == [definitionObject]})
     }
 }

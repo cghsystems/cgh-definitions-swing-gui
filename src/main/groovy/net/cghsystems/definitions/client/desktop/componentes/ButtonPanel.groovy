@@ -32,18 +32,13 @@ class ButtonPanel {
     def resultsPanel
 
 
-    def addDefinitionAction = {id, name, definitiion, description ->
+    def addOrUpdateDefinitionAction = {id, name, definition, description ->
+
         definitionsClientService.createDefinition(new Definition(id: 1, name: name,
-                definition: definitiion,
+                definition: definition,
                 description: description,
                 definitionCategoryId: 1))
 
-        searchForDefinitionAndDisplayResults(name)
-
-    }
-
-    def editDefinitionAction = {id, name, definitiion, description ->
-        ds.edit(id, name, definitiion, description)
         searchForDefinitionAndDisplayResults(name)
     }
 
@@ -80,13 +75,13 @@ class ButtonPanel {
             flowLayout()
 
             button("Add", mnemonic: "A", name: "add-definition", actionPerformed: {
-                addOrEditDefinitionDialog("Add", null, addDefinitionAction).show()
+                addOrEditDefinitionDialog("Add", null, addOrUpdateDefinitionAction).show()
             })
 
             button("Delete", mnemonic: "D", name: "delete-definition", actionPerformed: deleteNoteDialogAction)
 
             button("Edit", mnemonic: "E", name: "edit-definition", actionPerformed: {
-                addOrEditDefinitionDialog("Edit", stripeRenderer.currentlySelected, editDefinitionAction).show()
+                addOrEditDefinitionDialog("Edit", stripeRenderer.currentlySelected, addOrUpdateDefinitionAction).show()
             })
 
             button("Close", mnemonic: "C", name: "close", actionPerformed: {
