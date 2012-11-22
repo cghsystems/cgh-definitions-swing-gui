@@ -4,13 +4,15 @@ import groovy.swing.SwingBuilder
 import net.cghsystems.definitions.client.DefinitionsClientService
 import net.cghsystems.definitions.client.desktop.DefinitionsDesktopClient
 import net.cghsystems.definitions.client.desktop.DefintionsGUIShutdownListener
-import net.cghsystems.definitions.client.desktop.DesktopClientComponents
+import net.cghsystems.definitions.client.desktop.componentes.DesktopClientComponents
 import net.cghsystems.definitions.client.desktop.StripeRenderer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.ImportResource
 import org.springframework.context.annotation.Scope
-import org.springframework.context.annotation.Profile
+import net.cghsystems.definitions.client.desktop.componentes.ButtonPanel
+import java.awt.BorderLayout
+import net.cghsystems.definitions.client.desktop.componentes.ResultPanel
 
 /**
  * @author: chris
@@ -43,8 +45,13 @@ class DesktopApplicationContext {
     }
 
     @Bean
-    def swingBuilder() {
+    SwingBuilder swingBuilder() {
         new SwingBuilder()
+    }
+
+    @Bean
+    def buttonPanel() {
+        new ButtonPanel()
     }
 
     @Bean
@@ -53,7 +60,12 @@ class DesktopApplicationContext {
     }
 
     @Bean
-    def stripeRenderer(swingBuilder) {
-        new StripeRenderer(builder: swingBuilder)
+    StripeRenderer stripeRenderer() {
+        new StripeRenderer()
+    }
+
+    @Bean
+    def resultsPanel() {
+        new ResultPanel()
     }
 }

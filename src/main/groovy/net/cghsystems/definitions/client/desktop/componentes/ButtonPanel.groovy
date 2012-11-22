@@ -1,6 +1,5 @@
-package net.cghsystems.definitions.client.desktop
+package net.cghsystems.definitions.client.desktop.componentes
 
-import groovy.swing.SwingBuilder
 import groovy.util.logging.Log4j
 import net.cghsystems.definitions.domain.Definition
 
@@ -12,18 +11,27 @@ import javax.swing.JOptionPane
 
 /**
  * @author: chris
- * @date: 15/11/2012
+ * @date: 21/11/2012
  */
 @Log4j
-class DesktopClientComponents {
-
-    @Resource(name = "swingBuilder")
-    private SwingBuilder swingBuilder
+class ButtonPanel {
 
     @Resource(name = "shutdownListener")
     def shutdownListener
 
-    def buttonPanel() {
+    @Resource(name = "swingBuilder")
+    def swingBuilder
+
+    @Resource(name = "definitionsClientService")
+    def definitionsClientService
+
+    @Resource(name = "stripeRenderer")
+    def stripeRenderer
+
+    @Resource(name = "resultsPanel")
+    def resultsPanel
+
+    final buttonPanel() {
         swingBuilder.panel(constraints: BorderLayout.SOUTH, opaque: true, background: Color.WHITE) {
             flowLayout()
 
@@ -33,14 +41,16 @@ class DesktopClientComponents {
                             definition: definitiion,
                             description: description,
                             definitionCategoryId: 1))
+
                     searchForNoteAndDisplayResults(name)
+
                 }).show()
             })
 
             button("Delete", mnemonic: "D", name: "delete-definition", actionPerformed: deleteNoteDialogAction)
 
             button("Edit", mnemonic: "E", name: "edit-definition", actionPerformed: {
-                addOrEditNoteDialog("Edit", stripeRender.currentlySelected, {id, name, definitiion, description ->
+                addOrEditNoteDialog("Edit", stripeRenderer.currentlySelected, {id, name, definitiion, description ->
                     ds.edit(id, name, definitiion, description)
                     searchForNoteAndDisplayResults(name)
                 }).show()
@@ -51,6 +61,24 @@ class DesktopClientComponents {
             })
         }
     }
+
+    void searchForNoteAndDisplayResults(id) {
+        swingBuilder.doOutside {
+            log.debug("Searching for definition with id: ${id}")
+            try {
+                final data = definitionsClientService.findDefinition(1)
+                log.debug("Found definition ${data} to display")
+                //data.sort { it.name.toLowerCase() }
+                swingBuilder.edt {
+                    //This should be a listener pattern to loose the coupling
+                    resultsPanel.notifyOfDataChange([data])
+                }
+            } catch (e) {
+                log.error("An exception has occured while searching for data", e)
+            }
+        }
+    }
+
 
     def addOrEditNoteDialog(title, currentlySelected, addOrEditNote) {
         swingBuilder.dialog(id: 'addOrEditDialog', modal: true, title: "${title} Note", size: [400, 220]) {
@@ -106,5 +134,4 @@ class DesktopClientComponents {
 
         toDelete == "" ? nothingToDelete() : delete()
     }
-
 }

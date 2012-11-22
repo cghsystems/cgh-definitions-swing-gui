@@ -1,11 +1,12 @@
 package net.cghsystems.definitions.client.desktop
 
-import java.awt.BorderLayout as BL
-import javax.swing.JOptionPane as OP
 
+import java.awt.BorderLayout as BL
+
+import groovy.swing.SwingBuilder
 import groovy.util.logging.Log4j
 import net.cghsystems.definitions.client.DefinitionsClientService
-import net.cghsystems.definitions.domain.Definition
+import net.cghsystems.definitions.client.desktop.componentes.ButtonPanel
 
 import java.awt.Color
 import java.awt.FlowLayout
@@ -13,11 +14,7 @@ import java.awt.SystemTray
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import javax.annotation.Resource
-import javax.swing.BoxLayout
 import javax.swing.JFrame
-import groovy.swing.SwingBuilder
-import org.springframework.beans.factory.annotation.Value
-import com.sun.xml.internal.bind.v2.TODO
 
 /**
  * The main container of the Definitions SWING GUI. This GUI renders the main view that displays all of the definitions,
@@ -45,18 +42,19 @@ class DefinitionsDesktopClient {
     @Resource(name = "definitionsClientService")
     private DefinitionsClientService definitionsClientService;
 
-    @Resource(name = "desktopClientComponents")
-    private DesktopClientComponents desktopClientComponents
+    @Resource(name = "buttonPanel")
+    private ButtonPanel buttonPanel
 
     /** The application icon */
     @Resource(name = "iconImage")
     private iconImage
 
-
     @Resource(name = "shutdownListener")
     private shutdownListener
 
-    private resultsList
+    @Resource(name = "resultsPanel")
+    private resultsPanel
+
 
     private currentSelectedLocation
 
@@ -70,28 +68,20 @@ class DefinitionsDesktopClient {
                     pack: true, iconImage: iconImage) {
                 lineBorder(color: Color.WHITE, thickness: 10, parent: true)
                 lookAndFeel("system")
-                resultPanel()
+                resultsPanel.resultPanel()
                 searchPanel()
-                desktopClientComponents.buttonPanel()
+                buttonPanel.buttonPanel()
             }
 
             def sm = new DefinitionsGUIDisplayStateMachine(component: frame)
             addApplicationTrayIcon(title, frame, sm, shutDownListener)
         }
-        searchForNoteAndDisplayResults("")
+        buttonPanel.searchForNoteAndDisplayResults("")
     }
 
     void showSorry() {
         log.info("Cannot start the Desktop client at this time as there is no available service")
     }
-
-
-    private final resultPanel() {
-        swingBuilder.scrollPane(constraints: BL.CENTER) {
-            resultsList = list(fixedCellWidth: 600, fixedCellHeight: 75, cellRenderer: stripeRender)
-        }
-    }
-
 
     private final searchPanel() {
 
@@ -113,7 +103,7 @@ class DefinitionsDesktopClient {
                             actionPerformed: {
                                 ds.updateCurrentStoreSource(it.source.text)
 
-                                DefinitionsDesktopClient.log.info("NEED TO IMPLEMENT ds.updateCurrentStoreSource(it.source.text)")
+                                log.info("NEED TO IMPLEMENT ds.updateCurrentStoreSource(it.source.text)")
 
                                 searchForNoteAndDisplayResults("")
                             })
@@ -131,24 +121,6 @@ class DefinitionsDesktopClient {
 
     private def getDefaultCloseOperation() {
         SystemTray.isSupported() ? JFrame.DO_NOTHING_ON_CLOSE : JFrame.EXIT_ON_CLOSE
-    }
-
-    /**
-     * Hits the Definition service and displays the results
-     * @param d
-     */
-    private void searchForNoteAndDisplayResults(d) {
-        swingBuilder.doOutside {
-            log.debug("Searching for definition with id: ${d}")
-            try {
-                final data = definitionsClientService.findDefinition(1)
-                log.debug("Found definition ${data} to display")
-                //data.sort { it.name.toLowerCase() }
-                swingBuilder.edt { resultsList.listData = data }
-            } catch (e) {
-                log.error("An exception has occured while searching for data", e)
-            }
-        }
     }
 
     private void addApplicationTrayIcon(title, frame, sm, shutdownListener) {

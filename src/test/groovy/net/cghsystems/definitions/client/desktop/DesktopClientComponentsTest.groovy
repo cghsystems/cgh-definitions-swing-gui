@@ -1,6 +1,8 @@
 package net.cghsystems.definitions.client.desktop
 
+
 import groovy.swing.SwingBuilder
+import net.cghsystems.definitions.client.desktop.componentes.ButtonPanel
 import net.cghsystems.definitions.domain.Definition
 import org.fest.swing.annotation.RunsInEDT
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager
@@ -13,7 +15,6 @@ import spock.lang.Specification
 
 import javax.swing.JDialog
 import javax.swing.JFrame
-import spock.lang.Shared
 
 /**
  * @author: chris
@@ -21,10 +22,12 @@ import spock.lang.Shared
  */
 class DesktopClientComponentsTest extends Specification {
 
-    DesktopClientComponents unit
+
+    ButtonPanel unit
 
     void setup() {
-        unit = new DesktopClientComponents(swingBuilder: new SwingBuilder())
+        final builder = new SwingBuilder()
+        unit = new ButtonPanel(swingBuilder: builder)
         FailOnThreadViolationRepaintManager.install()
     }
 

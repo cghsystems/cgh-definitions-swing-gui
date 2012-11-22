@@ -1,10 +1,7 @@
 package net.cghsystems.definitions.client.desktop
 
 import net.cghsystems.definitions.client.desktop.ioc.DesktopApplicationContext
-import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
-import org.springframework.core.env.ConfigurableEnvironment
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext
 
 /**
  * Main class of the Definitions Desktop client.
