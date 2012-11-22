@@ -68,8 +68,4 @@ class DefinitionsClientService {
             false
         }
     }
-
-    List findAllDefinitionsForCategory(Integer categoryId) {
-        throw null
-    }
 }

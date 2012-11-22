@@ -74,7 +74,7 @@ class DefinitionsDesktopClient {
             }
 
             def sm = new DefinitionsGUIDisplayStateMachine(component: frame)
-            addApplicationTrayIcon(title, frame, sm, shutDownListener)
+            addApplicationTrayIcon(title, frame, sm)
         }
         buttonPanel.searchForDefinitionAndDisplayResults("")
     }
@@ -83,6 +83,7 @@ class DefinitionsDesktopClient {
         log.info("Cannot start the Desktop client at this time as there is no available service")
     }
 
+    //MOve to its own component and add tests
     private final searchPanel() {
 
         final keyListener = [keyTyped: {
@@ -123,7 +124,7 @@ class DefinitionsDesktopClient {
         SystemTray.isSupported() ? JFrame.DO_NOTHING_ON_CLOSE : JFrame.EXIT_ON_CLOSE
     }
 
-    private void addApplicationTrayIcon(title, frame, sm, shutdownListener) {
+    private void addApplicationTrayIcon(def title, def frame, def sm) {
         def ti = new DefinitionsTrayIcon(frame: frame, title: title, definitionsGUIDisplayStateMachine: sm, definitionsGUIShutDownListener: shutdownListener)
         ti.addTrayIcon(iconImage)
         shutdownListener << ti

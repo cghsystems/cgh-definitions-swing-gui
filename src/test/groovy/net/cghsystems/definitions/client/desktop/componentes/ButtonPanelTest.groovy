@@ -3,6 +3,7 @@ package net.cghsystems.definitions.client.desktop.componentes
 import groovy.swing.SwingBuilder
 import net.cghsystems.definitions.client.DefinitionsClientService
 import net.cghsystems.definitions.client.desktop.DefintionsGUIShutdownListener
+import net.cghsystems.definitions.client.desktop.StripeRenderer
 import net.cghsystems.definitions.domain.Definition
 import org.fest.swing.annotation.RunsInEDT
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager
@@ -15,6 +16,9 @@ import spock.lang.Specification
 
 import javax.swing.JDialog
 import javax.swing.JFrame
+import spock.lang.Shared
+import org.fest.swing.timing.Timeout
+import spock.lang.Ignore
 
 /**
  * @author: chris
@@ -193,7 +197,7 @@ class ButtonPanelTest extends Specification {
         def definition = "definition"
         def name = "name"
 
-        final definitionObject = new Definition(id:  1, name: name, description: description, definition: definition, definitionCategoryId: 1)
+        final definitionObject = new Definition(id: 1, name: name, description: description, definition: definition, definitionCategoryId: 1)
 
         given: "a definitionsClientService"
         final definitionsClientService = Mock(DefinitionsClientService)
@@ -214,5 +218,37 @@ class ButtonPanelTest extends Specification {
 
         and: "the results panel is called to update the view with the new data"
         1 * resultsPanel.notifyOfDataChange({it == [definitionObject]})
+    }
+
+    @RunsInEDT
+    @Ignore
+    def "should handle nothing to delete"() {
+
+        given: "a frame"
+        @Shared JFrame frame
+
+        FrameFixture f = GuiActionRunner.execute([executeInEDT: {
+            frame = new JFrame()
+            new FrameFixture(frame)
+        }] as GuiQuery)
+
+        and: "A Stripe Renderer"
+        def stripeRenderer = Mock(StripeRenderer)
+        unit.stripeRenderer = stripeRenderer
+
+        when: "delete is called"
+        f.show()
+        unit.deleteNoteDialogAction.call(frame)
+
+        then: "OptionDialo should be displayed"
+        f.dialog("dialog0").label("OptionPane.label").requireText("Please select a Note to delete")
+
+        and: "something"
+        1 * stripeRenderer.getCurrentlySelected() >> null
+
+
+
+
+
     }
 }

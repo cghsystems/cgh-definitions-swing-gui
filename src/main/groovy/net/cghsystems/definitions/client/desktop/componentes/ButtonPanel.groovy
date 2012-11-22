@@ -1,5 +1,6 @@
 package net.cghsystems.definitions.client.desktop.componentes
 
+import groovy.swing.SwingBuilder
 import groovy.util.logging.Log4j
 import net.cghsystems.definitions.domain.Definition
 
@@ -10,6 +11,8 @@ import javax.swing.BoxLayout
 import javax.swing.JOptionPane
 
 /**
+ * Encapsulates all of the Buttons and their actions that are shown at the foot of the Definitions GUI.
+ *
  * @author: chris
  * @date: 21/11/2012
  */
@@ -20,7 +23,7 @@ class ButtonPanel {
     def shutdownListener
 
     @Resource(name = "swingBuilder")
-    def swingBuilder
+    SwingBuilder swingBuilder
 
     @Resource(name = "definitionsClientService")
     def definitionsClientService
@@ -31,7 +34,10 @@ class ButtonPanel {
     @Resource(name = "resultsPanel")
     def resultsPanel
 
-
+    /**
+     * Adds a definition to be added or updated. Delegates to definitionsClientService. ONce a definition is added the
+     * resultsPanel is updated with the changes.
+     */
     def addOrUpdateDefinitionAction = {id, name, definition, description ->
 
         definitionsClientService.createDefinition(new Definition(id: 1, name: name,
@@ -46,18 +52,22 @@ class ButtonPanel {
      * The action that is executed on the 'delete' event. This is triggered on the click of the 'Delete' button
      * contained in the button panel
      */
-    def deleteNoteDialogAction = {
+    def deleteNoteDialogAction = { frame ->
 
-        final toDelete = stripeRender.currentlySelected?.id ?: ""
-        def optionPane = swingBuilder.optionPane()
+        final toDelete = stripeRenderer.currentlySelected?.id ?: ""
+
+        def optionPane
+        swingBuilder.edt { optionPane = swingBuilder.optionPane() }
 
         def nothingToDelete = {
-            optionPane.showMessageDialog(null, "Please select a Note to delete", "Nothing to Delete", JOptionPane.PLAIN_MESSAGE)
+            swingBuilder.edt {
+                optionPane.showMessageDialog(frame, "Please select a Note to delete", "Nothing to Delete", JOptionPane.PLAIN_MESSAGE)
+            }
         }
 
         def delete = {
             def options = ["Yes", "No"] as Object[]
-            def choice = optionPane.showOptionDialog(null, "Do you want to delete ${stripeRender.currentlySelected.name}", 'Delete Note',
+            def choice = optionPane.showOptionDialog(null, "Do you want to delete ${stripeRenderer.currentlySelected.name}", 'Delete Note',
                     JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, "")
 
             if (options[choice] == "Yes") {
@@ -70,6 +80,10 @@ class ButtonPanel {
         toDelete == "" ? nothingToDelete() : delete()
     }
 
+    /**
+     * The components that encapsulates the add, edit, delete and close buttons
+     * @return
+     */
     final buttonPanel() {
         swingBuilder.panel(constraints: BorderLayout.SOUTH, opaque: true, background: Color.WHITE) {
             flowLayout()
@@ -89,7 +103,14 @@ class ButtonPanel {
             })
         }
     }
-
+    /**
+     *
+     * TODO Move to its own class so it can be shared with the results panel
+     * Asks the DefinitionsClientService to search for the definition with the provided id. Updates the resultsPanel with
+     * the found definition.
+     *
+     * @param id
+     */
     void searchForDefinitionAndDisplayResults(id) {
         swingBuilder.doOutside {
             log.debug("Searching for definition with id: ${id}")
@@ -98,7 +119,6 @@ class ButtonPanel {
                 log.debug("Found definition ${data} to display")
                 //data.sort { it.name.toLowerCase() }
                 swingBuilder.edt {
-                    //This should be a listener pattern to loose the coupling
                     resultsPanel.notifyOfDataChange([data])
                 }
             } catch (e) {
@@ -107,7 +127,15 @@ class ButtonPanel {
         }
     }
 
-
+    /**
+     * Dialog that allows a user to enter new Definition data. If an edit action is requested then the existing data is
+     * displayed to allow for an edit to take place.
+     *
+     * @param title
+     * @param currentlySelected
+     * @param addOrEditNote
+     * @return
+     */
     def addOrEditDefinitionDialog(title, currentlySelected, addOrEditNote) {
         swingBuilder.dialog(id: 'addOrEditDialog', modal: true, title: "${title} Note", size: [400, 220]) {
             panel(background: Color.WHITE, opaque: true) {
@@ -134,4 +162,5 @@ class ButtonPanel {
             }
         }
     }
+
 }
