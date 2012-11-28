@@ -17,6 +17,7 @@ import javax.swing.JOptionPane
  * @date: 21/11/2012
  */
 @Log4j
+@Mixin(SearchAndDisplayResultsTrait)
 class ButtonPanel {
 
     @Resource(name = "shutdownListener")
@@ -103,29 +104,8 @@ class ButtonPanel {
             })
         }
     }
-    /**
-     *
-     * TODO Move to its own class so it can be shared with the results panel
-     * Asks the DefinitionsClientService to search for the definition with the provided id. Updates the resultsPanel with
-     * the found definition.
-     *
-     * @param id
-     */
-    void searchForDefinitionAndDisplayResults(id) {
-        swingBuilder.doOutside {
-            log.debug("Searching for definition with id: ${id}")
-            try {
-                final data = definitionsClientService.findDefinition(1)
-                log.debug("Found definition ${data} to display")
-                //data.sort { it.name.toLowerCase() }
-                swingBuilder.edt {
-                    resultsPanel.notifyOfDataChange([data])
-                }
-            } catch (e) {
-                log.error("An exception has occured while searching for data", e)
-            }
-        }
-    }
+
+
 
     /**
      * Dialog that allows a user to enter new Definition data. If an edit action is requested then the existing data is

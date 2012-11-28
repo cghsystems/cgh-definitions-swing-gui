@@ -12,13 +12,12 @@ import org.fest.swing.edt.GuiQuery
 import org.fest.swing.fixture.DialogFixture
 import org.fest.swing.fixture.FrameFixture
 import org.fest.swing.fixture.WindowFixture
+import spock.lang.Ignore
+import spock.lang.Shared
 import spock.lang.Specification
 
 import javax.swing.JDialog
 import javax.swing.JFrame
-import spock.lang.Shared
-import org.fest.swing.timing.Timeout
-import spock.lang.Ignore
 
 /**
  * @author: chris
@@ -197,7 +196,9 @@ class ButtonPanelTest extends Specification {
         def definition = "definition"
         def name = "name"
 
-        final definitionObject = new Definition(id: 1, name: name, description: description, definition: definition, definitionCategoryId: 1)
+        final definitionObject = new Definition(id: 1, name: name, description: description,
+                definition: definition,
+                definitionCategoryId: 1)
 
         given: "a definitionsClientService"
         final definitionsClientService = Mock(DefinitionsClientService)
@@ -221,7 +222,7 @@ class ButtonPanelTest extends Specification {
     }
 
     @RunsInEDT
-    @Ignore
+    @Ignore("Need to investigate how to get FEST to talk to the dialog")
     def "should handle nothing to delete"() {
 
         given: "a frame"
@@ -245,9 +246,6 @@ class ButtonPanelTest extends Specification {
 
         and: "something"
         1 * stripeRenderer.getCurrentlySelected() >> null
-
-
-
 
 
     }

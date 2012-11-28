@@ -16,10 +16,12 @@ class DesktopMain {
         new DesktopMain().start()
     }
 
-    AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(DesktopApplicationContext)
+    private AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(DesktopApplicationContext)
 
-
-    final start() {
+    /**
+     * Starts the swing client. If no server connection can be established then a warning dialog is shown to hte user.
+     */
+    final void start() {
 
         ctx.registerShutdownHook()
 

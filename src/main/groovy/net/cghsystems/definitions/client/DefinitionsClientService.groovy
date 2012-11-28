@@ -17,19 +17,19 @@ import groovy.util.logging.Log4j
 class DefinitionsClientService {
 
     @Resource(name = "deleteDefinitionsRequestChannel")
-    MessageChannel deleteChannel
+    private MessageChannel deleteChannel
 
     @Resource(name = "createDefinitionsRequestChannel")
-    MessageChannel createChannel
+    private MessageChannel createChannel
 
     @Resource(name = "findDefinitionsRequestChannel")
-    MessageChannel findRequestChannel
+    private MessageChannel findRequestChannel
 
     @Resource(name = "findDefinitionsReplyChannel")
-    PollableChannel findReplyChannel
+    private PollableChannel findReplyChannel
 
     @Resource(name = "pingChannel")
-    MessageChannel pingChannel
+    private MessageChannel pingChannel
 
 
     void deleteDefinition(id) {
@@ -67,5 +67,14 @@ class DefinitionsClientService {
             log.error("Exception talking to the services", e)
             false
         }
+    }
+
+    /**
+     * Hits the services to get available categories
+     *
+     * @return a list containing all of the available categories to display
+     */
+    def findAllCategories() {
+        return ["test1", "test2"]
     }
 }

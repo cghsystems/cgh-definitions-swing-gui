@@ -114,11 +114,4 @@ public class DefinitionsClientServiceTest extends Specification {
         then: "the create channel should have received the expected definition"
         1 * createChannel.send({it.payload == definition})
     }
-
-    def "should throw illegal arg if the services cannot be found"() {
-        given: "the unit has a crearte definition channel"
-        and: "the definintion object is"
-        when: "a deinfition is created" //unit.createDefinition(definition)
-        then: "An illegal arg should be thrown"
-    }
 }

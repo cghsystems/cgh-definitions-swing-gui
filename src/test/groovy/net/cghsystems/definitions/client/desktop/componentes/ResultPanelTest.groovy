@@ -48,5 +48,8 @@ class ResultPanelTest extends Specification
 
         then: "The result list should have a single member"
         f.list("resultList").requireItemCount(1)
+
+        and: "Cleanup"
+        f.cleanUp()
     }
 }

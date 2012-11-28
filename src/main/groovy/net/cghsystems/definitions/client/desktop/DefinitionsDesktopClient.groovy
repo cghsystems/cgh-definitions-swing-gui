@@ -15,6 +15,7 @@ import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import javax.annotation.Resource
 import javax.swing.JFrame
+import net.cghsystems.definitions.client.desktop.componentes.SearchAndDisplayResultsTrait
 
 /**
  * The main container of the Definitions SWING GUI. This GUI renders the main view that displays all of the definitions,
@@ -25,6 +26,7 @@ import javax.swing.JFrame
  *
  */
 @Log4j
+@Mixin(SearchAndDisplayResultsTrait)
 class DefinitionsDesktopClient {
 
     @Resource(name = "swingBuilder")
@@ -76,48 +78,11 @@ class DefinitionsDesktopClient {
             def sm = new DefinitionsGUIDisplayStateMachine(component: frame)
             addApplicationTrayIcon(title, frame, sm)
         }
-        buttonPanel.searchForDefinitionAndDisplayResults("")
+        searchForDefinitionAndDisplayResults("")
     }
 
     void showSorry() {
         log.info("Cannot start the Desktop client at this time as there is no available service")
-    }
-
-    //MOve to its own component and add tests
-    private final searchPanel() {
-
-        final keyListener = [keyTyped: {
-            final def handleEscape = {
-                searchForDefinitionAndDisplayResults("")
-                it.source.text = ""
-            }
-            it.keyChar == KeyEvent.VK_ESCAPE ? handleEscape(it) : searchForDefinitionAndDisplayResults(it.source.text)
-        }] as KeyAdapter
-
-        final addButtonGroup = {
-            def stores = ["test1", "test2"]
-
-            swingBuilder.panel(background: Color.WHITE, layout: new FlowLayout()) {
-                myGroup = buttonGroup()
-                stores.each {
-                    def r = radioButton(text: it, buttonGroup: myGroup, background: Color.WHITE,
-                            actionPerformed: {
-                                ds.updateCurrentStoreSource(it.source.text)
-
-                                log.info("NEED TO IMPLEMENT ds.updateCurrentStoreSource(it.source.text)")
-
-                                searchForDefinitionAndDisplayResults("")
-                            })
-                }
-            }
-        }
-
-        swingBuilder.vbox(constraints: BL.NORTH) {
-            addButtonGroup()
-            final search = textField()
-            search.addKeyListener(keyListener)
-            vstrut(height: 10, opaque: true, background: Color.WHITE)
-        }
     }
 
     private def getDefaultCloseOperation() {
