@@ -102,16 +102,29 @@ public class DefinitionsClientServiceTest extends Specification {
     //Create
     def "should request a message is created"() {
 
+        final expectedID = "createdId"
+        final expectedDefinition = Definition.buildWithId(expectedID)
+        final expectedDefinitionMessage = MessageBuilder.withPayload(expectedDefinition).build()
+
         given: "the unit has a create definition channel"
         final createChannel = Mock(MessageChannel)
         ReflectionTestUtils.setField(unit, "createChannel", createChannel)
 
+        and: "the unit has a create reply channel"
+        final createReplyChannel = Mock(PollableChannel)
+        ReflectionTestUtils.setField(unit, "createReplyChannel", createReplyChannel)
+
         and: "the definitions object is"
         final definition = new Definition(name: "something interesting")
 
-        when: unit.createDefinition(definition)
+        when: "A request for creation is sent"
+        final actual = unit.createDefinition(definition)
+
+        then: "The id should have been created for the definition"
+        assert actual.id == expectedID : "The Create request should create the id for the definition"
 
         then: "the create channel should have received the expected definition"
         1 * createChannel.send({it.payload == definition})
+        1 * createReplyChannel.receive(1000) >>  expectedDefinitionMessage
     }
 }

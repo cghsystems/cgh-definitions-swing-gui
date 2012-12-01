@@ -31,15 +31,19 @@ class DefinitionsClientService {
     @Resource(name = "pingChannel")
     private MessageChannel pingChannel
 
+    @Resource(name = "createDefinitionsReplyChannel")
+    private PollableChannel createReplyChannel
 
     void deleteDefinition(id) {
         deleteChannel.send(MessageBuilder.withPayload(id).build())
     }
 
-    void createDefinition(Definition definition) {
+    Definition createDefinition(Definition definition) {
         try {
             createChannel.send(MessageBuilder.withPayload(definition).build())
+            createReplyChannel.receive(1000).payload
         } catch (e) {
+            e.printStackTrace()
             throw new IllegalStateException("Unable to communicate with the Definitions server at this time")
         }
     }

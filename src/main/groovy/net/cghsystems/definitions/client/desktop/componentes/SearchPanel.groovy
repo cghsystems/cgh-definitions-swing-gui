@@ -1,14 +1,15 @@
 package net.cghsystems.definitions.client.desktop.componentes
 
+import groovy.swing.SwingBuilder
+import groovy.util.logging.Log4j
+import net.cghsystems.definitions.client.DefinitionsClientService
+
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.FlowLayout
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import javax.annotation.Resource
-import groovy.swing.SwingBuilder
-import net.cghsystems.definitions.client.DefinitionsClientService
-import groovy.util.logging.Log4j
 
 /**
  * @author: chris
@@ -24,9 +25,13 @@ class SearchPanel {
     @Resource(name = "definitionsClientService")
     DefinitionsClientService definitionsClientService
 
-    @Resource
+    @Resource(name = "resultsPanel")
     ResultPanel resultsPanel
 
+    /**
+     * Displays the text area for user to type search criteria into. This component orchestrates the communication with
+     * the server and notification of components of data to display
+     */
     def searchPanel() {
 
         /**
@@ -56,7 +61,6 @@ class SearchPanel {
                 stores.each {
                     radioButton(name: "${it}-radionbutton", text: it, buttonGroup: categoryButtonGroup, background: Color.WHITE,
                             actionPerformed: {
-                                ds.updateCurrentStoreSource(it.source.text)
                                 searchForDefinitionAndDisplayResults("")
                             })
                 }

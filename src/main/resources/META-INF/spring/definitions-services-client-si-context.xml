@@ -21,13 +21,19 @@
         <int-http:uri-variable name="id" expression="payload"/>
     </int-http:outbound-gateway>
 
+
     <!--Create Definition -->
     <int:channel id="createDefinitionsRequestChannel"/>
+    <int:channel id="createDefinitionsReplyChannel">
+        <int:queue/>
+    </int:channel>
 
-    <int-http:outbound-channel-adapter
-            url="${definition.services.target}/create/id/{id}/name/{name}/definition/{definition}/description/{description}/cat/{cat}"
-            channel="createDefinitionsRequestChannel" http-method="GET"
+    <int-http:outbound-gateway
+            url="${definition.services.target}/create/name/{name}/definition/{definition}/description/{description}/cat/{cat}"
+            request-channel="createDefinitionsRequestChannel" http-method="GET"
+            reply-channel="createDefinitionsReplyChannel"
             expected-response-type="net.cghsystems.definitions.domain.Definition">
+
         <int-http:uri-variable name="id" expression="payload.id"/>
         <int-http:uri-variable name="name" expression="payload.name"/>
         <int-http:uri-variable name="definition"
@@ -36,7 +42,9 @@
                                expression="payload.description"/>
         <int-http:uri-variable name="cat"
                                expression="payload.definitionCategoryId"/>
-    </int-http:outbound-channel-adapter>
+
+    </int-http:outbound-gateway>
+
 
     <!-- Delete -->
     <int:channel id="deleteDefinitionsRequestChannel"/>
@@ -47,6 +55,7 @@
             expected-response-type="net.cghsystems.definitions.domain.Definition">
         <int-http:uri-variable name="id" expression="payload"/>
     </int-http:outbound-channel-adapter>
+
 
     <!-- Ping -->
     <int:channel id="pingChannel"/>

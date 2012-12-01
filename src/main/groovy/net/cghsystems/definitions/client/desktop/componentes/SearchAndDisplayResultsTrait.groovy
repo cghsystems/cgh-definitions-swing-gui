@@ -1,9 +1,14 @@
 package net.cghsystems.definitions.client.desktop.componentes
 
+import groovy.util.logging.Log4j
+
 /**
+ * The Presenter in the MVP pattern representing the searching and display of results
+ *
  * @author: chris
  * @date: 28/11/2012
  */
+@Log4j
 class SearchAndDisplayResultsTrait {
 
     /**
@@ -14,7 +19,7 @@ class SearchAndDisplayResultsTrait {
      * definitionsClientService.
      *
      *
-     * @param id
+     * @param id of the definition to search for
      */
     void searchForDefinitionAndDisplayResults(id) {
         swingBuilder.doOutside {
@@ -30,11 +35,16 @@ class SearchAndDisplayResultsTrait {
         }
     }
 
+    /**
+     * Notify the results panel that noting is to be displayed
+     */
     void displayEmptyResultsList() {
-        log.info("Notifying results panel of empty results")
         notifyResultsPanel([])
     }
 
+    /**
+     * @param data for the resultsPanel to render
+     */
     private void notifyResultsPanel(data) {
         swingBuilder.edt {
             resultsPanel.notifyOfDataChange(data)

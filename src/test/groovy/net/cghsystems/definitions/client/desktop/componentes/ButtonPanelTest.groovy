@@ -246,7 +246,5 @@ class ButtonPanelTest extends Specification {
 
         and: "something"
         1 * stripeRenderer.getCurrentlySelected() >> null
-
-
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.ImportResource
 import org.springframework.context.annotation.Scope
+import net.cghsystems.definitions.client.desktop.componentes.SearchPanel
 
 /**
  * @author: chris
@@ -60,5 +61,10 @@ class DesktopApplicationContext {
     @Bean
     def resultsPanel() {
         new ResultPanel()
+    }
+
+    @Bean
+    def searchPanel()   {
+        new SearchPanel()
     }
 }

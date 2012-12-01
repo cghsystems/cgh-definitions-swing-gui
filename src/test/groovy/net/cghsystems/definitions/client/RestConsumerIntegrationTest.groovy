@@ -41,10 +41,10 @@ class RestConsumerIntegrationTest extends Specification {
     def "should create and then find and then delete definition from remote rest service"() {
 
         given: "The expected definition"
-        def expected = new Definition("RestConsumerIntegrationTest-1", "RestConsumerIntegrationTest", "RestConsumerIntegrationTest", "RestConsumerIntegrationTest", 49)
+        def expected = new Definition("RestConsumerIntegrationTest", "RestConsumerIntegrationTest", "RestConsumerIntegrationTest", 49)
 
         when: "Then expected definition is sent to the createDefinitionsReqestChannel"
-        unit.createDefinition(expected)
+        expected = unit.createDefinition(expected)
 
         then: "a request to the definition reply channel with the expected definition id should return the expected defintion"
         def actual = unit.findDefinition(expected.id)

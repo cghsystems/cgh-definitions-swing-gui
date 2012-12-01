@@ -87,7 +87,6 @@ class SearchPanelTest extends Specification {
         6 * resultPanel.notifyOfDataChange([1])
         1 * resultPanel.notifyOfDataChange([])
 
-
         and: "Cleaup"
         f.cleanUp()
     }

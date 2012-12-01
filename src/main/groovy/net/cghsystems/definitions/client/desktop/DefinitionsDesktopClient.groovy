@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent
 import javax.annotation.Resource
 import javax.swing.JFrame
 import net.cghsystems.definitions.client.desktop.componentes.SearchAndDisplayResultsTrait
+import net.cghsystems.definitions.client.desktop.componentes.SearchPanel
 
 /**
  * The main container of the Definitions SWING GUI. This GUI renders the main view that displays all of the definitions,
@@ -47,6 +48,9 @@ class DefinitionsDesktopClient {
     @Resource(name = "buttonPanel")
     private ButtonPanel buttonPanel
 
+    @Resource(name = "searchPanel")
+    private SearchPanel searchPanel
+
     /** The application icon */
     @Resource(name = "iconImage")
     private iconImage
@@ -71,7 +75,7 @@ class DefinitionsDesktopClient {
                 lineBorder(color: Color.WHITE, thickness: 10, parent: true)
                 lookAndFeel("system")
                 resultsPanel.resultPanel()
-                searchPanel()
+                searchPanel.searchPanel()
                 buttonPanel.buttonPanel()
             }
 
