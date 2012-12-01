@@ -41,12 +41,12 @@ class ButtonPanel {
      */
     def addOrUpdateDefinitionAction = {id, name, definition, description ->
 
-        definitionsClientService.createDefinition(new Definition(id: 1, name: name,
+         def created = definitionsClientService.createDefinition(new Definition(name: name,
                 definition: definition,
                 description: description,
                 definitionCategoryId: 1))
 
-        searchForDefinitionAndDisplayResults(name)
+        searchForDefinitionAndDisplayResults(created.id)
     }
 
     /**
@@ -74,7 +74,7 @@ class ButtonPanel {
             if (options[choice] == "Yes") {
                 log.info("Will delete definition with id: ${toDelete}")
                 definitionsClientService.deleteDefinition(toDelete as Integer)
-                searchForDefinitionAndDisplayResults("")
+                displayEmptyResultsList()
             }
         }
 

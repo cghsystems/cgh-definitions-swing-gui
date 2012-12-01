@@ -195,10 +195,17 @@ class ButtonPanelTest extends Specification {
         def description = "description"
         def definition = "definition"
         def name = "name"
+        def generatedId = "generateId"
 
-        final definitionObject = new Definition(id: 1, name: name, description: description,
+        final definitionObject = new Definition(name: name, description: description,
                 definition: definition,
                 definitionCategoryId: 1)
+
+
+        final definitionObjectWithId = new Definition(id: generatedId, name: name, description: description,
+                definition: definition,
+                definitionCategoryId: 1)
+
 
         given: "a definitionsClientService"
         final definitionsClientService = Mock(DefinitionsClientService)
@@ -209,16 +216,16 @@ class ButtonPanelTest extends Specification {
         unit.resultsPanel = resultsPanel
 
         when: "addDefinitionIsExecuted"
-        unit.addOrUpdateDefinitionAction.call(1, name, definition, description)
+        unit.addOrUpdateDefinitionAction.call(generatedId, name, definition, description)
 
         then: "The definition client service should be called with the expected definition"
-        1 * definitionsClientService.createDefinition({it == definitionObject})
+        1 * definitionsClientService.createDefinition({it == definitionObject}) >> definitionObjectWithId
 
         and: "a new search is made to get the new definitions"
-        1 * definitionsClientService.findDefinition(1) >> definitionObject
+        1 * definitionsClientService.findDefinition(generatedId) >> definitionObjectWithId
 
         and: "the results panel is called to update the view with the new data"
-        1 * resultsPanel.notifyOfDataChange({it == [definitionObject]})
+        1 * resultsPanel.notifyOfDataChange({it == [definitionObjectWithId]})
     }
 
     @RunsInEDT
@@ -246,5 +253,7 @@ class ButtonPanelTest extends Specification {
 
         and: "something"
         1 * stripeRenderer.getCurrentlySelected() >> null
+
+        f.cleanUp()
     }
 }

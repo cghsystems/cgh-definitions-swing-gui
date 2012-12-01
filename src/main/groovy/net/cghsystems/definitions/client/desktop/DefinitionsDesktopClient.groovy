@@ -82,7 +82,7 @@ class DefinitionsDesktopClient {
             def sm = new DefinitionsGUIDisplayStateMachine(component: frame)
             addApplicationTrayIcon(title, frame, sm)
         }
-        searchForDefinitionAndDisplayResults("")
+        displayEmptyResultsList()
     }
 
     void showSorry() {

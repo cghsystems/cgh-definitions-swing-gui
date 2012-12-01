@@ -21,11 +21,11 @@ class SearchAndDisplayResultsTrait {
      *
      * @param id of the definition to search for
      */
-    void searchForDefinitionAndDisplayResults(id) {
+    void searchForDefinitionAndDisplayResults(String id) {
         swingBuilder.doOutside {
             log.debug("Searching for definition with id: ${id}")
             try {
-                final data = definitionsClientService.findDefinition(1)
+                final data = definitionsClientService.findDefinition(id)
                 log.debug("Found definition ${data} to display")
                 //data.sort { it.name.toLowerCase() }
                 notifyResultsPanel([data])

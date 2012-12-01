@@ -61,7 +61,7 @@ class SearchPanel {
                 stores.each {
                     radioButton(name: "${it}-radionbutton", text: it, buttonGroup: categoryButtonGroup, background: Color.WHITE,
                             actionPerformed: {
-                                searchForDefinitionAndDisplayResults("")
+                                displayEmptyResultsList()
                             })
                 }
             }
