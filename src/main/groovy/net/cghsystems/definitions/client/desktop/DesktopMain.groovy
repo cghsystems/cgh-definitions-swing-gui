@@ -13,21 +13,28 @@ class DesktopMain {
 
     static main(args) {
         System.setProperty("spring.profiles.default", "cloud")
-        new DesktopMain().start()
+        new DesktopMain().init().start()
     }
 
-    private AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(DesktopApplicationContext)
+    /** The application Context instance */
+    def ctx;
+
+    /**
+     * Start the application context
+     */
+    DesktopMain init() {
+        ctx = new AnnotationConfigApplicationContext(DesktopApplicationContext)
+        ctx.registerShutdownHook()
+        this
+    }
 
     /**
      * Starts the swing client. If no server connection can be established then a warning dialog is shown to hte user.
      */
     final void start() {
 
-        ctx.registerShutdownHook()
-
         final clientService = ctx.getBean("definitionsClientService")
         final gui = ctx.getBean("definitionsDesktopClient")
-
 
         if (clientService.isAvailable()) {
             gui.showMain()
