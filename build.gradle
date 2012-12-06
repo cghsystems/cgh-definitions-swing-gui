@@ -4,14 +4,6 @@ gradle.taskGraph.whenReady {taskGraph ->
     }
 }
 
-test.doFirst {
-    tasks.getByPath(':cgh-definitions-services:startJettyAsDaemon').execute()
-}
-
-test.doLast {
-    tasks.getByPath(':cgh-definitions-services:jettyStop').execute()
-}
-
 dependencies {
 
     compile project(":cgh-definitions-domain")

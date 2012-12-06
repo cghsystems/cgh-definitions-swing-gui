@@ -10,6 +10,7 @@ import spock.lang.Specification
 
 import java.awt.event.KeyEvent
 import javax.swing.JFrame
+import org.junit.Ignore
 
 /**
  * @author: chris
@@ -83,7 +84,7 @@ class SearchPanelTest extends Specification {
         f.textBox("search-textfield").requireEmpty()
 
         and: "the client services should have been queried and the results notified"
-        6 * definitionsClientService.findDefinition(1) >> 1
+        6 * definitionsClientService.findDefinition(_) >> 1
         6 * resultPanel.notifyOfDataChange([1])
         1 * resultPanel.notifyOfDataChange([])
 
