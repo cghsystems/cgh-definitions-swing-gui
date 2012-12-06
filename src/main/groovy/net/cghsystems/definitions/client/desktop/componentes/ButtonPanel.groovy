@@ -73,7 +73,7 @@ class ButtonPanel {
 
             if (options[choice] == "Yes") {
                 log.info("Will delete definition with id: ${toDelete}")
-                definitionsClientService.deleteDefinition(toDelete as Integer)
+                definitionsClientService.deleteDefinition(toDelete)
                 displayEmptyResultsList()
             }
         }

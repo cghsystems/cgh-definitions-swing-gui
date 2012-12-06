@@ -12,7 +12,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 class DesktopMain {
 
     static main(args) {
-        System.setProperty("spring.profiles.default", "cloud")
+        System.setProperty("spring.profiles.default", "localhost")
         new DesktopMain().init().start()
     }
 
@@ -29,7 +29,7 @@ class DesktopMain {
     }
 
     /**
-     * Starts the swing client. If no server connection can be established then a warning dialog is shown to hte user.
+     * Starts the swing client. If no server connection can be established then a warning dialog is shown to the user.
      */
     final void start() {
 

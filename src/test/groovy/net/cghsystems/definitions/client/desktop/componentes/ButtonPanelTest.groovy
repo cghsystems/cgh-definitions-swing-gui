@@ -229,6 +229,11 @@ class ButtonPanelTest extends Specification {
     }
 
     @RunsInEDT
+    def  "should delete definition"() {
+
+    }
+
+    @RunsInEDT
     @Ignore("Need to investigate how to get FEST to talk to the dialog")
     def "should handle nothing to delete"() {
 
